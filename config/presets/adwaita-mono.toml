@@ -1,0 +1,105 @@
+# Adwaita Mono Style — Latin character variants only.
+#
+# Selected with PRESEVKA_PRESET=adwaita-mono. This file is appended to
+# config/private-build-plans.toml, so it must contain variant sections only:
+# the 500-unit cell, "normal" spacing, the cv/ss features and the nine weights
+# all stay as the base plan defines them.
+#
+# Why this preset exists: GNOME's Adwaita Mono is an Iosevka build shaped
+# toward Inter, and Pretendard's Latin is also Inter-derived, so these
+# letterforms share their design lineage with the Hangul Presevka imports.
+#
+# What it is NOT: real Adwaita Mono sets a 600-unit cell, "fixed" spacing and
+# noCvSs. Presevka keeps its own 500/1000 grid, so this is Adwaita Mono's
+# letterforms on Presevka's proportions, not a drop-in Adwaita Mono with
+# Hangul. The family name does not change, and releases build stock.
+#
+# Source: https://gitlab.gnome.org/GNOME/adwaita-fonts (mono/private-build-plans.toml)
+# Copyright (c) 2025 Jamie Gravendeel and Florian Müllner, SIL OFL 1.1.
+# Verified against the variant names in Iosevka v34.8.0.
+
+
+[buildPlans.PresevkaBase500.variants.design]
+two = "straight-neck-serifless"
+four = "closed-serifless"
+six = "closed-contour"
+eight = "two-circles"
+nine = "closed-contour"
+zero = "dotted"
+capital-d = "more-rounded-serifless"
+capital-g = "toothless-rounded-serifless-hooked"
+capital-i = "short-serifed"
+capital-m = "flat-bottom-serifless"
+capital-q = "crossing"
+capital-w = "straight-flat-top-serifless"
+f = "flat-hook-serifless"
+i = "serifed-asymmetric"
+j = "flat-hook-serifed"
+l = "serifed-flat-tailed"
+r = "hookless-serifless"
+t = "flat-hook"
+w = "straight-flat-top-serifless"
+y = "straight-turn-serifless"
+long-s = "flat-hook-serifless"
+lower-gamma = "straight"
+lower-lambda = "tailed-turn"
+lower-upsilon = "straight-serifless"
+lower-chi = "semi-chancery-straight-serifless"
+cyrl-capital-u = "straight-turn-serifless"
+cyrl-u = "straight-turn-serifless"
+asterisk = "hex-high"
+brace = "straight"
+guillemet = "straight"
+number-sign = "slanted"
+at = "fourfold-solid-inner"
+percent = "rings-continuous-slash"
+micro-sign = "tailed-serifless"
+lig-equal-chain = "without-notch"
+lig-hyphen-chain = "without-notch"
+
+[buildPlans.PresevkaBase500.variants.italic]
+two = "straight-neck-serifless"
+four = "closed-serifless"
+six = "closed-contour"
+eight = "two-circles"
+nine = "closed-contour"
+zero = "dotted"
+capital-d = "more-rounded-serifless"
+capital-g = "toothless-rounded-serifless-hooked"
+capital-i = "short-serifed"
+capital-m = "flat-bottom-serifless"
+capital-q = "crossing"
+capital-w = "straight-flat-top-serifless"
+a = "single-storey-serifless"
+d = "toothed-serifless"
+f = "flat-hook-tailed"
+i = "serifed-asymmetric"
+j = "flat-hook-serifed"
+k = "straight-serifless"
+l = "serifed-flat-tailed"
+r = "hookless-serifless"
+t = "flat-hook"
+w = "straight-flat-top-serifless"
+u = "toothed-serifless"
+y = "straight-turn-serifless"
+long-s = "flat-hook-tailed"
+eszet = "sulzbacher-serifless"
+lower-gamma = "straight"
+lower-lambda = "tailed-turn"
+lower-upsilon = "straight-serifless"
+lower-chi = "semi-chancery-straight-serifless"
+cyrl-ve = "standard-serifless"
+cyrl-capital-u = "straight-turn-serifless"
+cyrl-u = "straight-turn-serifless"
+cyrl-ef = "serifless"
+cyrl-yeri = "corner"
+cyrl-yery = "corner"
+asterisk = "hex-high"
+brace = "straight"
+guillemet = "straight"
+number-sign = "slanted"
+at = "fourfold-solid-inner"
+percent = "rings-continuous-slash"
+micro-sign = "tailed-serifless"
+lig-equal-chain = "without-notch"
+lig-hyphen-chain = "without-notch"

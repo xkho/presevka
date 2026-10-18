@@ -3,6 +3,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$ROOT/scripts/weights.sh"
 HINT_MODE="$(presevka_hint_mode)"
+PRESET="$(presevka_preset)"
 SRC="$ROOT/.cache/src/Iosevka"
 OUT="$ROOT/build/iosevka"
 REPO="${IOSEVKA_REPO:-https://github.com/be5invis/Iosevka.git}"
@@ -23,7 +24,7 @@ fi
 git -C "$SRC" fetch --depth 1 origin "$REF"
 git -C "$SRC" checkout --detach FETCH_HEAD
 
-cp "$ROOT/config/private-build-plans.toml" "$SRC/private-build-plans.toml"
+presevka_write_build_plan "$ROOT" "$PRESET" "$SRC/private-build-plans.toml"
 
 (
   cd "$SRC"

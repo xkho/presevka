@@ -5,6 +5,7 @@ source "$ROOT/scripts/weights.sh"
 HINT_MODE="$(presevka_hint_mode)"
 
 echo "Hinting mode: $HINT_MODE  (override with PRESEVKA_HINT=full|latin|gasp|none)"
+echo "Latin preset: $(presevka_preset)  (override with PRESEVKA_PRESET=<name>)"
 "$ROOT/scripts/doctor.sh"
 "$ROOT/scripts/build_iosevka.sh"
 "$ROOT/scripts/build_pretendard.sh"

@@ -36,6 +36,26 @@ Presevka converts them to TrueType outlines when needed, normalizes them to a
 center, places strict Hangul in a 1000-unit advance, and merges it into the
 matching Iosevka base.
 
+## Adwaita Fonts (optional build preset only)
+
+- Repository: https://gitlab.gnome.org/GNOME/adwaita-fonts
+- Copyright: Copyright (c) 2025, Jamie Gravendeel and Florian Müllner, together
+  with the Inter Project Authors and Renzhi Li as recorded in that project's
+  `LICENSE`
+- License: SIL Open Font License 1.1
+- Reserved Font Names: none declared in that project's `LICENSE`
+
+`config/presets/adwaita-mono.toml` reproduces the character-variant selection
+GNOME's Adwaita Mono makes, because Adwaita Mono is an Iosevka build shaped
+toward Inter and Pretendard's Latin is Inter-derived as well.
+
+No Adwaita glyph outline is included in Presevka, under this preset or any
+other. The preset only chooses among glyph designs Iosevka already draws, and
+it changes nothing else: Presevka keeps its own 500-unit cell, `normal`
+spacing, character-variant features and nine weights, where Adwaita Mono uses
+a 600-unit cell, `fixed` spacing, `noCvSs` and two weights. Released builds
+use the stock Iosevka variants; this preset is opt-in via `PRESEVKA_PRESET`.
+
 ## ttfautohint
 
 - Project: https://freetype.org/ttfautohint/

@@ -32,4 +32,21 @@ if command -v uv >/dev/null 2>&1; then
   fi
 fi
 
+# Workflow checks. actionlint is static and offline; the ref check resolves the
+# tags the workflows name, which actionlint does not do and which otherwise
+# only fails on GitHub, after the job has already been queued.
+if command -v actionlint >/dev/null 2>&1; then
+  if actionlint; then
+    printf '%-6s %s\n' "lint" "workflows pass actionlint"
+  else
+    missing=1
+  fi
+else
+  printf '%-6s %s\n' "lint" "actionlint not installed; skipping workflow lint"
+fi
+
+if command -v uv >/dev/null 2>&1; then
+  uv run python "$ROOT/tools/check_workflows.py" || missing=1
+fi
+
 exit "$missing"
