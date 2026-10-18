@@ -20,19 +20,22 @@ BODY = """\
 | `Presevka-{version}-ttf.zip` | 데스크톱 설치용, 9 weight × Upright/Italic 18개 페이스 / Desktop install, 18 faces |
 | `Presevka-{version}-woff2.zip` | 웹폰트 / Web fonts |
 
-개별 TTF 파일은 아래 자산 목록에서 따로 받을 수 있습니다.
+개별 TTF 파일은 아래 assets 목록에서 따로 받을 수 있습니다.
 Individual TTF faces are listed in the assets below.
 
 라이선스 문서(`OFL.txt`, `THIRD_PARTY.md`, `FONTLOG.md`)는 각 아카이브에 함께 들어 있습니다.
 Each archive ships with its licensing paperwork.
 
-## 변경 사항
+## 주요 변경 사항
 
 {korean}
 
-## Changes
+## Highlights
 
 {english}
+
+전체 변경 이력은 각 아카이브의 `FONTLOG.md`에 있습니다.
+The complete history is in `FONTLOG.md` inside each archive.
 """
 
 
@@ -43,8 +46,29 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--version", default=PRESEVKA_VERSION)
     p.add_argument("--fontlog", type=Path, default=Path("FONTLOG.md"))
     p.add_argument("--fontlog-ko", type=Path, default=Path("FONTLOG.ko.md"))
+    p.add_argument(
+        "--max-items",
+        type=int,
+        default=3,
+        help="본문에 실을 항목 수. FONTLOG는 중요한 것부터 적습니다. 0이면 전부.",
+    )
     p.add_argument("--output", type=Path)
     return p.parse_args()
+
+
+def top_items(entry: str, limit: int) -> str:
+    """Keep the first `limit` bullets, each of which may wrap over several lines."""
+    if limit <= 0:
+        return entry
+    bullets: list[list[str]] = []
+    for line in entry.splitlines():
+        if line.startswith("- "):
+            bullets.append([line])
+        elif bullets:
+            bullets[-1].append(line)
+    if not bullets:
+        return entry
+    return "\n".join("\n".join(b).rstrip() for b in bullets[:limit])
 
 
 def fontlog_entry(path: Path, version: str) -> str:
@@ -67,8 +91,8 @@ def main() -> None:
     args = parse_args()
     body = BODY.format(
         version=args.version,
-        korean=fontlog_entry(args.fontlog_ko, args.version),
-        english=fontlog_entry(args.fontlog, args.version),
+        korean=top_items(fontlog_entry(args.fontlog_ko, args.version), args.max_items),
+        english=top_items(fontlog_entry(args.fontlog, args.version), args.max_items),
     )
     if args.output:
         args.output.write_text(body, encoding="utf-8")
