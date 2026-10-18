@@ -24,7 +24,9 @@ from font_utils import (
 
 
 def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="Merge prepared Pretendard Hangul into the custom Iosevka base.")
+    p = argparse.ArgumentParser(
+        description="Merge prepared Pretendard Hangul into the custom Iosevka base."
+    )
     p.add_argument("--base", required=True, type=Path)
     p.add_argument("--hangul", required=True, type=Path)
     p.add_argument("--output", required=True, type=Path)
@@ -37,13 +39,13 @@ def parse_args() -> argparse.Namespace:
 def set_names(font: TTFont, family: str, weight: str, slope: str) -> None:
     name = font["name"]
     style = presevka_style_name(weight, slope)
-    ps_family = "".join(ch for ch in family if ch.isascii() and ch.isalnum()) or "Presevka"
+    ps_family = (
+        "".join(ch for ch in family if ch.isascii() and ch.isalnum()) or "Presevka"
+    )
     ps_style = "".join(ch for ch in style if ch.isascii() and ch.isalnum()) or "Regular"
     ps_name = f"{ps_family}-{ps_style}"
     full = family if style == "Regular" else f"{family} {style}"
-    legacy_family, legacy_subfamily = presevka_legacy_names(
-        family, weight, slope
-    )
+    legacy_family, legacy_subfamily = presevka_legacy_names(family, weight, slope)
 
     # Iosevka's intermediate build intentionally has a temporary family name
     # ("Presevka Base 500"). Remove *all* old naming records that can expose
@@ -104,9 +106,7 @@ def main() -> None:
                 f"{base['OS/2'].usWeightClass} != {donor['OS/2'].usWeightClass}"
             )
         if latin_cell(base) != PRESEVKA_LATIN_CELL:
-            raise RuntimeError(
-                f"base Latin cell is not {PRESEVKA_LATIN_CELL}"
-            )
+            raise RuntimeError(f"base Latin cell is not {PRESEVKA_LATIN_CELL}")
 
         donor_cmap = best_cmap(donor)
         donor_hmtx = donor["hmtx"]
@@ -153,7 +153,8 @@ def main() -> None:
         if "hhea" in base:
             base["hhea"].numberOfHMetrics = len(glyph_order)
 
-        # Add/replace Hangul mappings in every Unicode cmap subtable that can hold BMP codepoints.
+        # Add/replace Hangul mappings in every Unicode cmap subtable that
+        # can hold BMP codepoints.
         for table in base["cmap"].tables:
             if not table.isUnicode():
                 continue

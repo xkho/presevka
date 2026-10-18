@@ -42,7 +42,8 @@ def exists(repo: str, tag: str) -> bool | None:
     try:
         out = subprocess.run(
             ["gh", "api", f"repos/{repo}/git/ref/tags/{tag}"],
-            capture_output=True, timeout=20,
+            capture_output=True,
+            timeout=20,
         )
         if out.returncode == 0:
             return True
@@ -91,8 +92,10 @@ def main() -> int:
         print("A job using these fails at 'Set up job'.", file=sys.stderr)
         return 1
     if skipped:
-        print(f"workflow actions: {len(wanted) - len(skipped)} ok, "
-              f"{len(skipped)} unchecked (GitHub unreachable)")
+        print(
+            f"workflow actions: {len(wanted) - len(skipped)} ok, "
+            f"{len(skipped)} unchecked (GitHub unreachable)"
+        )
         return 0
     print(f"workflow actions: all {len(wanted)} refs resolve")
     return 0

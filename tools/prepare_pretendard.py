@@ -4,6 +4,15 @@ import argparse
 import json
 from pathlib import Path
 
+from fontTools.fontBuilder import FontBuilder
+from fontTools.misc.transform import Transform
+from fontTools.pens.cu2quPen import Cu2QuPen
+from fontTools.pens.recordingPen import DecomposingRecordingPen
+from fontTools.pens.transformPen import TransformPen
+from fontTools.pens.ttGlyphPen import TTGlyphPen
+from fontTools.ttLib import TTFont
+from fontTools.ttLib.scaleUpem import scale_upem
+
 from font_utils import (
     ALL_HANGUL_RANGES,
     EXPECTED_MODERN_SYLLABLES,
@@ -15,14 +24,6 @@ from font_utils import (
     in_ranges,
     latin_cell,
 )
-from fontTools.fontBuilder import FontBuilder
-from fontTools.misc.transform import Transform
-from fontTools.pens.cu2quPen import Cu2QuPen
-from fontTools.pens.recordingPen import DecomposingRecordingPen
-from fontTools.pens.transformPen import TransformPen
-from fontTools.pens.ttGlyphPen import TTGlyphPen
-from fontTools.ttLib import TTFont
-from fontTools.ttLib.scaleUpem import scale_upem
 
 
 def parse_args() -> argparse.Namespace:
@@ -104,7 +105,8 @@ def main() -> None:
             )
         if target_upem != 1000:
             raise RuntimeError(
-                f"expected Iosevka UPM 1000, got {target_upem}; update math deliberately"
+                f"expected Iosevka UPM 1000, got {target_upem}; "
+                "update math deliberately"
             )
         if target_advance != PRESEVKA_HANGUL_CELL:
             raise RuntimeError(
@@ -168,9 +170,7 @@ def main() -> None:
                 recording = DecomposingRecordingPen(source.getGlyphSet())
                 source.getGlyphSet()[name].draw(recording)
                 pen = TTGlyphPen(None)
-                recording.replay(
-                    TransformPen(pen, Transform(1, 0, 0, 1, dx, 0))
-                )
+                recording.replay(TransformPen(pen, Transform(1, 0, 0, 1, dx, 0)))
                 glyph = pen.glyph()
                 glyph.recalcBounds(glyf)
                 glyf[name] = glyph
@@ -229,8 +229,7 @@ def main() -> None:
             widths = {
                 check_hmtx.metrics[name][0]
                 for cp, name in check_cmap.items()
-                if in_ranges(cp, STRICT_HANGUL_RANGES)
-                and name in check_hmtx.metrics
+                if in_ranges(cp, STRICT_HANGUL_RANGES) and name in check_hmtx.metrics
             }
             if widths != {target_advance}:
                 raise RuntimeError(

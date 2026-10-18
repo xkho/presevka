@@ -7,7 +7,9 @@ from pathlib import Path
 from font_utils import PRESEVKA_VERSION
 
 # "### 20 September 2026 - Presevka 0.4.0 - Kwanho Lee (이관호)"
-ENTRY = re.compile(r"^###\s+.*?\bPresevka\s+(?P<version>\d+\.\d+\.\d+)\b.*$", re.MULTILINE)
+ENTRY = re.compile(
+    r"^###\s+.*?\bPresevka\s+(?P<version>\d+\.\d+\.\d+)\b.*$", re.MULTILINE
+)
 
 HEADER = """\
 ## 다운로드 / Downloads
@@ -46,7 +48,7 @@ def fontlog_entry(text: str, version: str) -> str:
         if match.group("version") != version:
             continue
         end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
-        return text[match.end():end].strip()
+        return text[match.end() : end].strip()
     known = ", ".join(m.group("version") for m in matches) or "none"
     raise SystemExit(
         f"FONTLOG.md has no entry for {version}. Add one before releasing. "

@@ -3,9 +3,8 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from fontTools.ttLib import TTFont
-
 from fontTools.pens.recordingPen import DecomposingRecordingPen
+from fontTools.ttLib import TTFont
 
 from font_utils import (
     DONOR_ABSENT_HANGUL_RANGES,
@@ -66,12 +65,8 @@ def instructed_glyphs(font: TTFont, names) -> int:
 
 def check_hinting(font: TTFont, cmap: dict, mode: str) -> str:
     """Verify the font carries exactly the hinting the build asked for."""
-    hangul = {
-        name for cp, name in cmap.items() if in_ranges(cp, STRICT_HANGUL_RANGES)
-    }
-    latin = {
-        cmap[ord(ch)] for ch in "ABCabc0123" if ord(ch) in cmap
-    }
+    hangul = {name for cp, name in cmap.items() if in_ranges(cp, STRICT_HANGUL_RANGES)}
+    latin = {cmap[ord(ch)] for ch in "ABCabc0123" if ord(ch) in cmap}
     hangul_hinted = instructed_glyphs(font, hangul)
     latin_hinted = instructed_glyphs(font, latin)
     has_gasp = "gasp" in font
@@ -119,9 +114,7 @@ def check_hinting(font: TTFont, cmap: dict, mode: str) -> str:
         return f"latin only ({latin_hinted}/{len(latin)} probes, Hangul untouched)"
 
     if not hangul_hinted:
-        raise RuntimeError(
-            "hinting mode 'full' must instruct Hangul; found none"
-        )
+        raise RuntimeError("hinting mode 'full' must instruct Hangul; found none")
     return f"full ({hangul_hinted}/{len(hangul)} Hangul glyphs instructed)"
 
 
@@ -138,9 +131,7 @@ def main() -> None:
 
         latin_sample = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
         latin_widths = {
-            hmtx.metrics[cmap[ord(ch)]][0]
-            for ch in latin_sample
-            if ord(ch) in cmap
+            hmtx.metrics[cmap[ord(ch)]][0] for ch in latin_sample if ord(ch) in cmap
         }
         if latin_widths != {PRESEVKA_LATIN_CELL}:
             raise RuntimeError(
@@ -165,9 +156,7 @@ def main() -> None:
         # empty. If a donor ever fills them, they need composing advances and
         # jamo-composition GSUB rules rather than the two-cell treatment every
         # imported glyph gets here, so fail loudly instead of shipping them.
-        unexpected = [
-            cp for cp in cmap if in_ranges(cp, DONOR_ABSENT_HANGUL_RANGES)
-        ]
+        unexpected = [cp for cp in cmap if in_ranges(cp, DONOR_ABSENT_HANGUL_RANGES)]
         if unexpected:
             raise RuntimeError(
                 f"{len(unexpected)} conjoining/extended jamo appeared "
@@ -241,12 +230,11 @@ def main() -> None:
             22: style,
         }
         for name_id, expected in expected_names.items():
-            actual = {
-                r.toUnicode() for r in font["name"].names if r.nameID == name_id
-            }
+            actual = {r.toUnicode() for r in font["name"].names if r.nameID == name_id}
             if actual != {expected}:
                 raise RuntimeError(
-                    f"name ID {name_id} must be exactly {expected!r}; got {sorted(actual)}"
+                    f"name ID {name_id} must be exactly {expected!r}; "
+                    f"got {sorted(actual)}"
                 )
 
         # OpenType stores this as 16.16 fixed point, so allow one storage unit.
@@ -263,26 +251,26 @@ def main() -> None:
             if r.nameID in {1, 3, 4, 6, 16, 17}
         }
         stale = sorted(
-            v
-            for v in public_name_values
-            if "Presevka Base" in v or "PresevkaBase" in v
+            v for v in public_name_values if "Presevka Base" in v or "PresevkaBase" in v
         )
         if stale:
             raise RuntimeError(f"stale build-only font names remain: {stale}")
 
-        copyright_values = {
-            r.toUnicode() for r in font["name"].names if r.nameID == 0
-        }
+        copyright_values = {r.toUnicode() for r in font["name"].names if r.nameID == 0}
         if not copyright_values or not all(
             "Kwanho Lee" in value for value in copyright_values
         ):
-            raise RuntimeError("Presevka copyright notice is missing from font metadata")
-        if not any("Kwanho Lee (\uc774\uad00\ud638)" in value for value in copyright_values):
-            raise RuntimeError("Unicode copyright metadata is missing the Korean holder name")
+            raise RuntimeError(
+                "Presevka copyright notice is missing from font metadata"
+            )
+        if not any(
+            "Kwanho Lee (\uc774\uad00\ud638)" in value for value in copyright_values
+        ):
+            raise RuntimeError(
+                "Unicode copyright metadata is missing the Korean holder name"
+            )
 
-        license_values = {
-            r.toUnicode() for r in font["name"].names if r.nameID == 13
-        }
+        license_values = {r.toUnicode() for r in font["name"].names if r.nameID == 13}
         if not license_values or not all(
             "SIL Open Font License 1.1" in value for value in license_values
         ):
@@ -290,7 +278,8 @@ def main() -> None:
 
         if "OS/2" in font and font["OS/2"].fsType != 0:
             raise RuntimeError(
-                f"OS/2 fsType must permit OFL use and embedding, got {font['OS/2'].fsType}"
+                "OS/2 fsType must permit OFL use and embedding, "
+                f"got {font['OS/2'].fsType}"
             )
         if "OS/2" not in font or font["OS/2"].usWeightClass != args.weight_class:
             actual = font["OS/2"].usWeightClass if "OS/2" in font else None
@@ -314,8 +303,7 @@ def main() -> None:
         expected_angle = PRESEVKA_POST_ITALIC_ANGLE if is_italic else 0.0
         if abs(font["post"].italicAngle - expected_angle) > 0.01:
             raise RuntimeError(
-                f"italic angle must be {expected_angle}, "
-                f"got {font['post'].italicAngle}"
+                f"italic angle must be {expected_angle}, got {font['post'].italicAngle}"
             )
 
         hinting_summary = check_hinting(font, cmap, args.hinting)
@@ -330,14 +318,19 @@ def main() -> None:
                 upright_samples = (0x3131, 0x314F, 0xAC00, 0xAC01, 0xB098, 0xD7A3)
                 for cp in upright_samples:
                     if cp not in cmap or cp not in source_cmap:
-                        raise RuntimeError(f"upright Hangul sample U+{cp:04X} is missing")
+                        raise RuntimeError(
+                            f"upright Hangul sample U+{cp:04X} is missing"
+                        )
                     actual_outline = decomposed_outline(font, cmap[cp])
                     source_outline = decomposed_outline(source, source_cmap[cp])
                     if actual_outline != source_outline:
                         raise RuntimeError(
                             f"Hangul outline U+{cp:04X} differs from upright donor"
                         )
-                    if hmtx.metrics[cmap[cp]] != source["hmtx"].metrics[source_cmap[cp]]:
+                    if (
+                        hmtx.metrics[cmap[cp]]
+                        != source["hmtx"].metrics[source_cmap[cp]]
+                    ):
                         raise RuntimeError(
                             f"Hangul metrics U+{cp:04X} differ from upright donor"
                         )
@@ -353,7 +346,10 @@ def main() -> None:
         print(f"Hinting: {hinting_summary}")
         print(f"Modern Hangul mappings: {len(modern)}")
         print(f"Compatibility jamo mappings: {len(compat_jamo)}")
-        print(f"Minimum modern-Hangul ink margins: left={min_left:.1f}, right={min_right:.1f}")
+        print(
+            "Minimum modern-Hangul ink margins: "
+            f"left={min_left:.1f}, right={min_right:.1f}"
+        )
     finally:
         font.close()
 

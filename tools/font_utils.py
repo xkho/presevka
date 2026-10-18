@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+
 from fontTools.pens.boundsPen import BoundsPen
 from fontTools.ttLib import TTFont
 

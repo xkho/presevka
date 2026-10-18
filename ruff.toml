@@ -1,0 +1,27 @@
+# tools/ 스크립트는 직접 실행되므로 그 안의 모듈(font_utils)이 first-party입니다.
+src = ["tools"]
+target-version = "py311"
+line-length = 88
+
+# specimen.py는 CodeSnap으로 찍는 견본입니다. 주석의 칸 맞춤이 글꼴의 2:1 격자를
+# 보여주는 내용 자체라, 포매터가 건드리면 의미가 사라집니다.
+extend-exclude = ["specimen.py"]
+
+[lint]
+select = [
+  "E",    # pycodestyle
+  "F",    # pyflakes
+  "I",    # import 정렬
+  "UP",   # 최신 문법
+  "B",    # 흔한 버그 패턴
+  "SIM",  # 단순화
+  "RUF",  # ruff 자체 규칙
+]
+
+# 배너와 릴리스 노트가 쓰는 곱셈 기호는 의도된 활자입니다.
+allowed-confusables = ["×"]
+
+[lint.per-file-ignores]
+# HEADER 템플릿은 릴리스 본문으로 그대로 나가는 마크다운입니다. 표 행과 문장의
+# 줄바꿈이 렌더링 결과를 바꾸므로 줄 길이를 강제하지 않습니다.
+"tools/release_notes.py" = ["E501"]
