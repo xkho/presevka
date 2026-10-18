@@ -72,3 +72,40 @@ presevka_apply_hinting() {
     --input "$font" --output "$font.tmp"
   mv "$font.tmp" "$font"
 }
+
+# Latin character-variant preset, selected by PRESEVKA_PRESET. "stock" uses
+# Iosevka's own glyph designs; any other value names a fragment in
+# config/presets/ that is appended to the base build plan.
+presevka_preset() {
+  local preset="${PRESEVKA_PRESET:-stock}"
+  # Restricted to a plain name so the value cannot escape config/presets/.
+  if [[ ! "$preset" =~ ^[a-z0-9][a-z0-9-]*$ ]]; then
+    echo "PRESEVKA_PRESET must match [a-z0-9-]; got '$preset'" >&2
+    return 1
+  fi
+  printf '%s\n' "$preset"
+}
+
+# Write the build plan Iosevka will use: the base grid, plus the preset's
+# character variants when one is selected.
+presevka_write_build_plan() {
+  local root="$1" preset="$2" dest="$3"
+  cp "$root/config/private-build-plans.toml" "$dest"
+  [[ "$preset" == "stock" ]] && return 0
+
+  local fragment="$root/config/presets/$preset.toml"
+  if [[ ! -f "$fragment" ]]; then
+    echo "Unknown PRESEVKA_PRESET '$preset'. Available:" >&2
+    local found=0
+    for file in "$root"/config/presets/*.toml; do
+      [[ -e "$file" ]] || continue
+      found=1
+      printf '  %s\n' "$(basename "$file" .toml)" >&2
+    done
+    (( found )) || echo "  (none)" >&2
+    echo "  stock" >&2
+    return 1
+  fi
+  printf '\n' >>"$dest"
+  cat "$fragment" >>"$dest"
+}
