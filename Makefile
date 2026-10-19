@@ -10,12 +10,12 @@ build-fast:
 package:
 	./scripts/package.sh
 
-# Redraw the README banners from the fonts in dist/. Declares its own
-# dependencies inline, so it needs no entry in pyproject.toml.
+# Redraw the README artwork from the fonts in dist/. Both renderers declare
+# their own dependencies inline, and neither is part of the repository: they
+# are artwork helpers, not build steps.
 banner:
 	uv run tools/render_banner.py
 
-# Redraw the README weight-axis specimen from the fonts in dist/.
 specimen:
 	uv run tools/render_specimen.py
 

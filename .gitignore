@@ -9,6 +9,10 @@ dist/OFL.txt
 dist/licenses/
 dist/THIRD_PARTY.md
 dist/FONTLOG.md
+# 문서용 아트워크 생성기. 폰트 빌드에는 필요하지 않습니다.
+tools/render_banner.py
+tools/render_specimen.py
+
 __pycache__/
 *.pyc
 .DS_Store
