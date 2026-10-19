@@ -61,7 +61,7 @@ make package
 > [!TIP]
 > 대부분의 경우 빌드할 필요가 없습니다. stylistic set과 character variant는
 > 배포되는 폰트에 이미 들어 있어 에디터 설정만으로 켤 수 있습니다.
-> [README의 Iosevka Features](../README.md#iosevka-features)를 먼저 보세요.
+> [Iosevka features](./iosevka_features.md)를 먼저 보세요.
 > 사용하는 앱이 OpenType 피처를 지원하지 않을 때만 아래가 필요합니다.
 
 ### 미리 만들어진 프리셋
