@@ -8,7 +8,7 @@ licensed under the MIT License in `LICENSE-CODE`.
 ## Iosevka
 
 - Repository: https://github.com/be5invis/Iosevka
-- Pinned version: v34.8.0
+- Pinned version: v34.9.0
 - Copyright: Copyright (c) 2015-2026, Renzhi Li (aka. Belleve Invis)
 - License: SIL Open Font License 1.1
 - Reserved Font Names: none declared in the pinned version's `LICENSE.md`

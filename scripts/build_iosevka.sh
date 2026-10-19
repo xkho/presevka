@@ -7,7 +7,7 @@ PRESET="$(presevka_preset)"
 SRC="$ROOT/.cache/src/Iosevka"
 OUT="$ROOT/build/iosevka"
 REPO="${IOSEVKA_REPO:-https://github.com/be5invis/Iosevka.git}"
-REF="${IOSEVKA_REF:-v34.8.0}"
+REF="${IOSEVKA_REF:-v34.9.0}"
 JOBS="${IOSEVKA_JOBS:-2}"
 
 [[ "$JOBS" =~ ^[1-9][0-9]*$ ]] || {

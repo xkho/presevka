@@ -16,7 +16,7 @@ The public family name and all user-visible naming records use `Presevka`.
 
 ## Upstream sources
 
-- Iosevka v34.8.0, copyright Renzhi Li / The Iosevka Project Authors.
+- Iosevka v34.9.0, copyright Renzhi Li / The Iosevka Project Authors.
 - Pretendard v1.3.9 static weights, copyright Kil Hyung-jin and the respective authors
   of its upstream glyph designs.
 
@@ -24,6 +24,16 @@ Exact notices and license terms are recorded in `OFL.txt` and
 `THIRD_PARTY.md`.
 
 ## ChangeLog
+
+### 19 October 2026 - Presevka 0.4.1 - Kwanho Lee (이관호)
+
+- Updated the Iosevka base from v34.8.0 to v34.9.0, which adds 176 characters
+  and refines a few outlines. Of the glyphs both versions share, 35 changed:
+  `!`, `?`, `D`, `G`, some accented Latin and five Greek letters. The changes
+  are sub-unit — every advance is identical and no bounding box moves by more
+  than one unit in a 1000-unit em — so the text colour and metrics hold.
+  Presevka's own design, cell geometry and build are untouched, and no Hangul
+  or jamo outline differs.
 
 ### 20 September 2026 - Presevka 0.4.0 - Kwanho Lee (이관호)
 
