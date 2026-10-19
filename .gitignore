@@ -12,6 +12,7 @@ dist/FONTLOG.md
 # 문서용 아트워크 생성기. 폰트 빌드에는 필요하지 않습니다.
 tools/render_banner.py
 tools/render_specimen.py
+tools/render_cells.py
 
 __pycache__/
 *.pyc
