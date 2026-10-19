@@ -10,8 +10,8 @@
 
 One line per weight, thin at the top and black at the bottom, drawn as SVG
 outlines so the image stays sharp at any size and needs no font installed.
-The background is transparent and the two ink colours are Iosevka's own, so
-the specimen sits next to Iosevka's documentation without clashing.
+The background is transparent and the colours are Iosevka's own, so the
+specimen sits next to Iosevka's documentation without clashing.
 """
 
 from __future__ import annotations
@@ -28,14 +28,18 @@ from font_utils import PRESEVKA_WEIGHTS
 
 ROOT = Path(__file__).resolve().parents[1]
 
-# Code in the body colour, comment in the accent, as a syntax theme would.
-CODE = "float Fox.quick(h);  "
+# Coloured the way an editor would: keyword, then the rest of the statement,
+# then the comment.
+KEYWORD = "float"
+CODE = " Fox.quick(h);  "
 COMMENT = "// 다람쥐 헌 쳇바퀴에 타고파"
 
-# Iosevka's own specimen palette (images/ss-*.{light,dark}.svg).
+# Iosevka's own colours. Ink and keyword come from images/weights.*.svg, the
+# weight sample under Features in its README, which this specimen mirrors.
+# The comment grey is from its website.
 PALETTES = {
-    "light": {"ink": "#20242e", "accent": "#048fbf"},
-    "dark": {"ink": "#dee4e3", "accent": "#03aee9"},
+    "light": {"ink": "#20242e", "keyword": "#8757ad", "muted": "#6e7372"},
+    "dark": {"ink": "#dee4e3", "keyword": "#b77fdb", "muted": "#acb0b0"},
 }
 
 
@@ -46,7 +50,6 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--prefix", default="presevka-specimen")
     p.add_argument("--size", type=int, default=30, help="글자 크기(px)")
     p.add_argument("--line-height", type=float, default=1.62)
-    p.add_argument("--label-size", type=int, default=13)
     return p.parse_args()
 
 
@@ -74,17 +77,11 @@ def render(font_dir: Path, palette: dict[str, str], args: argparse.Namespace) ->
             raise SystemExit(f"font not found: {path}\nBuild Presevka first.")
         fonts[weight] = TTFont(path)
 
-    label_font = fonts["Regular"]
-    upem = label_font["head"].unitsPerEm
+    upem = fonts["Regular"]["head"].unitsPerEm
     scale = args.size / upem
-    label_scale = args.label_size / upem
-
-    # Measure once so every line shares the same left edge.
-    _, text_end = run_path(label_font, CODE + COMMENT, 0)
-    label_widths = [run_path(label_font, w, 0)[1] for w in PRESEVKA_WEIGHTS]
-    gutter = max(label_widths) * label_scale + args.size * 0.9
     pad = args.size * 0.7
-    width = gutter + text_end * scale + pad
+    _, text_end = run_path(fonts["Regular"], KEYWORD + CODE + COMMENT, 0)
+    width = pad * 2 + text_end * scale
     step = args.size * args.line_height
     height = pad + step * len(PRESEVKA_WEIGHTS)
 
@@ -92,19 +89,15 @@ def render(font_dir: Path, palette: dict[str, str], args: argparse.Namespace) ->
     for index, weight in enumerate(PRESEVKA_WEIGHTS):
         font = fonts[weight]
         baseline = pad + step * index + args.size * 0.74
-        code, end = run_path(font, CODE, 0)
-        comment, _ = run_path(font, COMMENT, end)
-        label, label_end = run_path(label_font, weight, 0)
-        label_x = gutter - args.size * 0.9 - label_end * label_scale
+        keyword, after_keyword = run_path(font, KEYWORD, 0)
+        code, after_code = run_path(font, CODE, after_keyword)
+        comment, _ = run_path(font, COMMENT, after_code)
         rows.append(
-            f'  <g transform="translate({label_x:.1f} {baseline:.1f}) '
-            f'scale({label_scale:.5f} -{label_scale:.5f})" '
-            f'fill="{palette["ink"]}" fill-opacity=".45">'
-            f'<path d="{label}"/></g>\n'
-            f'  <g transform="translate({gutter:.1f} {baseline:.1f}) '
+            f'  <g transform="translate({pad:.1f} {baseline:.1f}) '
             f'scale({scale:.5f} -{scale:.5f})">'
+            f'<path fill="{palette["keyword"]}" d="{keyword}"/>'
             f'<path fill="{palette["ink"]}" d="{code}"/>'
-            f'<path fill="{palette["accent"]}" d="{comment}"/></g>'
+            f'<path fill="{palette["muted"]}" d="{comment}"/></g>'
         )
 
     for font in fonts.values():
@@ -114,7 +107,7 @@ def render(font_dir: Path, palette: dict[str, str], args: argparse.Namespace) ->
         f'<svg xmlns="http://www.w3.org/2000/svg" '
         f'width="{width:.0f}" height="{height:.0f}" '
         f'viewBox="0 0 {width:.0f} {height:.0f}" role="img" '
-        f'aria-label="Presevka 굵기별 견본: {CODE.strip()} {COMMENT}">\n'
+        f'aria-label="Presevka 굵기별 견본: {KEYWORD}{CODE.rstrip()} {COMMENT}">\n'
         + "\n".join(rows)
         + "\n</svg>\n"
     )
