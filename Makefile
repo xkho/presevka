@@ -1,4 +1,4 @@
-.PHONY: build build-fast package banner doctor install clean distclean
+.PHONY: build build-fast package banner specimen doctor install clean distclean
 
 build:
 	./scripts/build.sh
@@ -14,6 +14,10 @@ package:
 # dependencies inline, so it needs no entry in pyproject.toml.
 banner:
 	uv run tools/render_banner.py
+
+# Redraw the README weight-axis specimen from the fonts in dist/.
+specimen:
+	uv run tools/render_specimen.py
 
 doctor:
 	./scripts/doctor.sh
