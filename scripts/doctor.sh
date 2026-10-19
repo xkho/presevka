@@ -12,7 +12,9 @@ for cmd in git node npm uv; do
 done
 
 if command -v node >/dev/null 2>&1; then
-  node -e 'const major=Number(process.versions.node.split(".")[0]); if(major<18){console.error(`Node >=18 recommended; found ${process.versions.node}`); process.exit(1)} console.log(`node version ${process.versions.node} OK`)'
+  # Iosevka declares engines.node >= 16, which is the floor. CI builds on 22,
+  # so that is what is actually verified and what the docs recommend.
+  node -e 'const major=Number(process.versions.node.split(".")[0]); if(major<16){console.error(`Node >=16 required by Iosevka; found ${process.versions.node}`); process.exit(1)} console.log(`node version ${process.versions.node}` + (major<22 ? " OK (22+ recommended; CI builds on 22)" : " OK"))'
 fi
 
 if command -v uv >/dev/null 2>&1; then

@@ -8,11 +8,34 @@
   </picture>
 </p>
 
+---
+
 <p align="center">
 <span style="font-style: italic;">
   Iosevka에 Pretendard의 한글을 결합한 고정폭 글꼴<br>
 </span>
 </p>
+
+
+[Presevka](https://github.com/xkho/presevka)는 Iosevka 또는 Pretendard의 공식 배포판이 아니며, [Iosevka](https://github.com/be5invis/Iosevka)를 코드와 라틴 문자의 기반으로, [Pretendard](https://github.com/orioncactus/pretendard)를 한글 글리프의 기반으로 삼는 독립적인 폰트입니다. 한글 글리프가 포함된 Iosevka 스타일 폰트를 찾는다면,
+[Sarasa Gothic](https://github.com/be5invis/Sarasa-Gothic)도 찾아보세요!
+
+## 다운로드
+
+1. [Github release 에서 다운받기](https://github.com/xkho/presevka/releases/latest)
+2. [Source 에서 빌드하는 방법 보기](./docs/build_from_source_instruction.md)
+
+## 특징
+
+- **한글 한 칸이 라틴 두 칸에 정확히 맞물립니다.** 표와 주석 정렬이 한글이
+  섞여도 무너지지 않습니다.
+- **현대 한글 음절 11,172자 전체**와 호환 자모 53자를 담았습니다.
+- **9 weight × Upright/Italic, 18개 페이스.** Italic에서도 한글은 기울이지 않은
+  Pretendard 윤곽을 유지합니다.
+- **힌팅이 적용되어 있습니다.** 11–13px처럼 작은 크기에서 한글 가로획이 픽셀
+  그리드에 맞아 또렷합니다.
+- Pretendard 한글 윤곽은 원본 비율을 유지한 채 가로로 2%만 확대하고, 나머지
+  폭은 좌우 여백으로 둡니다.
 
 <p align="center">
   <picture>
@@ -22,88 +45,74 @@
   </picture>
 </p>
 
----
-
-> [!NOTE]
-> [Presevka](https://github.com/xkho/presevka)는 Iosevka 또는 Pretendard의 공식 배포판이 아니며,
-> [Iosevka](https://github.com/be5invis/Iosevka)를 코드와 라틴 문자의 기반으로,
-> [Pretendard](https://github.com/orioncactus/pretendard)를 한글 글리프의 기반으로 삼는
-> 독립적인 폰트입니다.
 
 
-## 다운로드
+## Iosevka Features
 
-[최신 버전 다운로드](https://github.com/xkho/presevka/releases/latest)
+Presevka의 라틴 글자는 [Iosevka](https://github.com/be5invis/Iosevka)를 손대지
+않고 그대로 씁니다. Iosevka는 글자 하나하나에 대안 모양을 마련해 두고 그것을
+OpenType 피처로 골라 쓰게 만든 고정폭 글꼴입니다. `0`에 점을 넣을지 사선을
+그을지, `l`에 꼬리를 달지, `g`를 한 층으로 그릴지를 쓰는 사람이 정합니다.
 
-## 글꼴 변형
+그 선택지가 **stylistic set 19종과 character variant 99종**으로 Presevka에
+그대로 들어 있습니다. 폰트를 다시 받거나 빌드할 필요 없이 에디터 설정만으로
+켜집니다.
 
-Iosevka의 stylistic set 19종과 character variant 99종이 그대로 들어 있습니다.
-폰트를 다시 받지 않고 에디터 설정으로 켭니다.
+### Stylistic sets
 
-```jsonc
-"editor.fontLigatures": "'ss14'"   // JetBrains Mono 스타일
-```
-
-미리보기는 [Iosevka의 stylistic set 문서](https://github.com/be5invis/Iosevka/blob/v34.9.0/doc/stylistic-sets.md)에
-있습니다. Presevka는 Iosevka의 라틴 글자를 그대로 쓰므로 그 그림이 곧 이 글꼴의
-모습입니다.
-
-<details>
-<summary>stylistic set 목록</summary>
-
-`ss01` Andale Mono · `ss02` Anonymous Pro · `ss03` Consolas · `ss04` Menlo ·
-`ss05` Fira Mono · `ss06` Liberation Mono · `ss07` Monaco · `ss08` Pragmata
-Pro · `ss09` Source Code Pro · `ss10` Envy Code R · `ss11` X Window · `ss12`
-Ubuntu Mono · `ss13` Lucida · `ss14` JetBrains Mono · `ss15` IBM Plex Mono ·
-`ss16` PT Mono · `ss17` Recursive Mono · `ss18` Input Mono · `ss20` Curly
-
-</details>
-
-<details>
-<summary>GNOME Adwaita Mono 스타일</summary>
-
-`config/presets/adwaita-mono.toml`이 고르는 글자꼴을 OpenType 피처로 옮긴
-것입니다. 직접 빌드하지 않아도 같은 모습이 됩니다.
+한 번에 글꼴 전체의 인상을 바꾸는 묶음입니다. 널리 쓰이는 고정폭 글꼴의 분위기를
+흉내 내도록 미리 조합해 둔 것으로, `ss14`는 JetBrains Mono, `ss05`는 Fira Mono,
+`ss09`는 Source Code Pro 스타일입니다.
 
 ```jsonc
-"editor.fontLigatures": "'VAAB' 4, 'VAAC' 4, 'VLAC' 2, 'VLAD' 2, 'VSAB' 7, 'VSAH' 1, 'VSAI' 1, 'VSAJ' 2, 'VSAL' 7, 'VSAO' 3, 'VSAS' 5, 'cv02' 1, 'cv04' 1, 'cv06' 1, 'cv08' 2, 'cv09' 1, 'cv10' 6, 'cv14' 4, 'cv17' 20, 'cv19' 3, 'cv23' 4, 'cv26' 4, 'cv32' 7, 'cv41' 11, 'cv44' 6, 'cv45' 6, 'cv47' 10, 'cv52' 9, 'cv54' 7, 'cv57' 7, 'cv59' 4, 'cv62' 16, 'cv70' 1, 'cv76' 3, 'cv82' 1, 'cv84' 9"
+"editor.fontLigatures": "'ss14'"
 ```
 
-</details>
+아래 문서의 미리보기가 곧 이 글꼴의 모습입니다. Presevka가 Iosevka의 라틴을
+그대로 쓰기 때문입니다.
+
+<table>
+  <tr>
+    <td>
+      <h3>
+        <a href="https://github.com/be5invis/Iosevka/blob/v34.9.0/doc/stylistic-sets.md"> 
+          List of stylistic sets of Iosevka
+        </a>
+      </h3>
+    </td>
+
+  </tr>
+</table>
+
+### Character variants
+
+글자 하나씩 따로 고르는 방식입니다. stylistic set이 통째로 바꾸는 것과 달리 `0`만
+점 있는 모양으로 바꾸거나 `i`에만 세리프를 더하는 식으로 쓸 수 있고, 여러 개를
+함께 적으면 그대로 겹쳐 적용됩니다.
+
+```jsonc
+"editor.fontLigatures": "'cv10' 6, 'cv17' 20"
+```
+
+아래 문서에서 글자별 선택지와 그 코드를 찾을 수 있습니다.
+
+<table>
+  <tr>
+    <td>
+      <h3>
+      <a href="https://github.com/be5invis/Iosevka/blob/v34.9.0/doc/character-variants.md">
+        List of character variants of Iosevka
+      </a>
+      </h3>
+    </td>
+  </tr>
+</table>
 
 > [!NOTE]
 > OpenType 피처 지원은 앱마다 다릅니다. VS Code, kitty, WezTerm, Ghostty에서
-> 동작하며, 일부 터미널은 지원하지 않습니다. 그런 경우에는
-> `PRESEVKA_PRESET`으로 직접 빌드하세요.
-
-## 소스에서 빌드
-
-### 의존성
-
-- Node.js 18 이상과 npm
-- Python 3.11 이상
-- [uv](https://docs.astral.sh/uv/)
-
-### 빌드
-
-```sh
-git clone https://github.com/xkho/presevka.git
-cd presevka
-
-make doctor
-make build
-```
-
-아홉 가지 weight의 Upright와 Italic, 총 18개 TTF가 `dist/`에 생성됩니다.
-`make package`를 실행하면 `Presevka-<version>-ttf.zip`과 `Presevka-<version>-woff2.zip`이 만들어집니다.
-
-라틴 글자꼴을 바꾸는 프리셋이 [`config/presets/`](./config/presets/)에 있습니다.
-예를 들어 GNOME Adwaita Mono의 글자꼴 선택을 따르려면 다음과 같이 빌드합니다.
-한글과 셀 너비는 그대로입니다.
-
-```sh
-PRESEVKA_PRESET=adwaita-mono make build
-```
+> 동작하며 일부 터미널은 지원하지 않습니다. 그런 앱을 쓴다면 원하는 글자꼴이
+> 기본값으로 박힌 TTF를 직접 만들 수 있습니다.
+> [소스에서 빌드하는 방법](./docs/build_from_source_instruction.md)을 참고하세요.
 
 ## 라이선스
 
