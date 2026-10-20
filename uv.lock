@@ -117,7 +117,7 @@ wheels = [
 
 [[package]]
 name = "presevka-builder"
-version = "0.4.1"
+version = "0.5.0"
 source = { virtual = "." }
 dependencies = [
     { name = "brotli" },

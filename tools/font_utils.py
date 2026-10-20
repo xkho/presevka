@@ -19,7 +19,7 @@ def _font_revision(version: str) -> float:
 # Single source of truth. merge_fonts.py stamps these into every face and
 # qa_font.py verifies them, so a release bump only happens here and in
 # pyproject.toml.
-PRESEVKA_VERSION = "0.4.1"
+PRESEVKA_VERSION = "0.5.0"
 PRESEVKA_FONT_REVISION = _font_revision(PRESEVKA_VERSION)
 
 PRESEVKA_WEIGHTS = (
@@ -43,6 +43,25 @@ PRESEVKA_HANGUL_CELL = 1000
 # preserving its original weight-dependent horizontal proportions. The
 # conventional full-em cell leaves the remainder as side bearings.
 PRESEVKA_HANGUL_OUTLINE_X_SCALE = 1.02
+
+# Stroke matching. Pretendard's Hangul is instantiated from its variable font at
+# the wght whose vertical stem equals the Iosevka base's, measured on these two
+# single-stroke probes: every other shared letter carries joins, curves or
+# terminals that a bounding box cannot tell apart from the stem itself.
+PRESEVKA_STEM_PROBE_LATIN = "|"
+PRESEVKA_STEM_PROBE_HANGUL = "\u3163"  # HANGUL LETTER I, one bare vertical stroke
+
+# How far the two stems may end up apart: this fraction of the Latin stem, or
+# PRESEVKA_STEM_SLACK units, whichever is larger. Coordinates are rounded on the
+# way down from Pretendard's 2048-unit em, so the lightest weights need the
+# absolute floor rather than a percentage.
+PRESEVKA_STEM_TOLERANCE = 0.02
+PRESEVKA_STEM_SLACK = 2.0
+
+# Thin is the exception. Pretendard's wght axis stops at 45 and cannot be drawn
+# as light as Iosevka Thin, so its Hangul stem stays about a fifth heavier.
+PRESEVKA_STEM_FLOOR_WEIGHTS = ("Thin",)
+PRESEVKA_STEM_FLOOR_TOLERANCE = 0.25
 
 # Hinting stages, selected by the PRESEVKA_HINT environment variable.
 #   full  - ttfautohint over the merged font, so Hangul is hinted too
@@ -102,6 +121,33 @@ def glyph_bounds(font: TTFont, glyph_name: str):
     pen = BoundsPen(glyph_set)
     glyph_set[glyph_name].draw(pen)
     return pen.bounds
+
+
+def stroke_width(font: TTFont, ch: str, *, location=None) -> float:
+    """Return a single-stroke glyph's ink width, in 1000-unit em terms.
+
+    Normalizing by UPM lets stems be compared across Iosevka's 1000-unit em and
+    Pretendard's 2048-unit one. `location` reads the width at one point on a
+    variable font's axes without instantiating the whole font.
+    """
+    name = best_cmap(font).get(ord(ch))
+    if name is None:
+        raise RuntimeError(f"font has no glyph for U+{ord(ch):04X}")
+    glyph_set = font.getGlyphSet(location=location) if location else font.getGlyphSet()
+    pen = BoundsPen(glyph_set)
+    glyph_set[name].draw(pen)
+    if pen.bounds is None:
+        raise RuntimeError(f"U+{ord(ch):04X} has no outline to measure")
+    x_min, _, x_max, _ = pen.bounds
+    return (x_max - x_min) / font["head"].unitsPerEm * 1000.0
+
+
+def stem_slack(latin_stem: float, *, at_axis_floor: bool) -> float:
+    """Return how far a Hangul stem may sit from the Latin stem, in font units."""
+    fraction = (
+        PRESEVKA_STEM_FLOOR_TOLERANCE if at_axis_floor else PRESEVKA_STEM_TOLERANCE
+    )
+    return max(latin_stem * fraction, PRESEVKA_STEM_SLACK)
 
 
 def latin_cell(font: TTFont) -> int:

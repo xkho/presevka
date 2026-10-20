@@ -15,9 +15,28 @@ fi
 git -C "$SRC" fetch --depth 1 origin "$REF"
 git -C "$SRC" checkout --detach FETCH_HEAD
 
+# One variable source for every weight: prepare_pretendard.py instantiates it at
+# the wght whose Hangul stem matches the Iosevka base it is being fitted to.
+font="$SRC/packages/pretendard/dist/public/variable/PretendardVariable.ttf"
+
+# Keep a conservative fallback in case upstream reorganizes the distribution.
+if [[ ! -f "$font" ]]; then
+  mapfile -t candidates < <(
+    find "$SRC" -type f -iname "PretendardVariable.ttf" \
+      | grep -Ev '/node_modules/' \
+      | sort -u
+  )
+  if (( ${#candidates[@]} != 1 )); then
+    echo "Could not uniquely identify Pretendard Variable." >&2
+    printf 'Candidates (%d):\n' "${#candidates[@]}" >&2
+    printf '  %s\n' "${candidates[@]:-<none>}" >&2
+    exit 1
+  fi
+  font="${candidates[0]}"
+fi
+
 for weight in "${PRESEVKA_WEIGHTS[@]}"; do
   base="$ROOT/build/iosevka/Iosevka500-${weight}.ttf"
-  font="$SRC/packages/pretendard/dist/public/static/Pretendard-${weight}.otf"
   output_font="$OUT/Pretendard1000-${weight}.ttf"
   report="$OUT/Pretendard1000-${weight}.metrics.json"
 
@@ -25,23 +44,6 @@ for weight in "${PRESEVKA_WEIGHTS[@]}"; do
     echo "Missing Iosevka ${weight} base. Run scripts/build_iosevka.sh first." >&2
     exit 1
   }
-
-  # Keep a conservative fallback in case upstream reorganizes the distribution.
-  if [[ ! -f "$font" ]]; then
-    mapfile -t candidates < <(
-      find "$SRC" -type f \
-        \( -iname "Pretendard-${weight}.otf" -o -iname "Pretendard-${weight}.ttf" \) \
-        | grep -Ev '/node_modules/' \
-        | sort -u
-    )
-    if (( ${#candidates[@]} != 1 )); then
-      echo "Could not uniquely identify Pretendard ${weight}." >&2
-      printf 'Candidates (%d):\n' "${#candidates[@]}" >&2
-      printf '  %s\n' "${candidates[@]:-<none>}" >&2
-      exit 1
-    fi
-    font="${candidates[0]}"
-  fi
 
   uv run python "$ROOT/tools/prepare_pretendard.py" \
     --input "$font" \

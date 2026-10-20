@@ -4,14 +4,13 @@ import argparse
 import json
 from pathlib import Path
 
-from fontTools.fontBuilder import FontBuilder
 from fontTools.misc.transform import Transform
-from fontTools.pens.cu2quPen import Cu2QuPen
 from fontTools.pens.recordingPen import DecomposingRecordingPen
 from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont
 from fontTools.ttLib.scaleUpem import scale_upem
+from fontTools.varLib import instancer
 
 from font_utils import (
     ALL_HANGUL_RANGES,
@@ -19,18 +18,23 @@ from font_utils import (
     PRESEVKA_HANGUL_CELL,
     PRESEVKA_HANGUL_OUTLINE_X_SCALE,
     PRESEVKA_LATIN_CELL,
+    PRESEVKA_STEM_PROBE_HANGUL,
+    PRESEVKA_STEM_PROBE_LATIN,
     STRICT_HANGUL_RANGES,
     best_cmap,
     in_ranges,
     latin_cell,
+    stem_slack,
+    stroke_width,
 )
 
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(
         description=(
-            "Normalize a static Pretendard weight to the Iosevka UPM and fit Hangul "
-            "to exactly two 500-unit Latin cells."
+            "Instantiate Pretendard Variable at the weight whose stem matches the "
+            "Iosevka base, normalize it to the Iosevka UPM, and fit Hangul to "
+            "exactly two 500-unit Latin cells."
         )
     )
     p.add_argument("--input", required=True, type=Path)
@@ -40,39 +44,41 @@ def parse_args() -> argparse.Namespace:
     return p.parse_args()
 
 
-def convert_cff_to_truetype(font: TTFont) -> str:
-    """Return the source flavor and ensure the working font uses glyf outlines."""
-    if "glyf" in font:
-        return "truetype"
-    if "CFF2" in font:
+def weight_axis(font: TTFont) -> tuple[float, float]:
+    """Return the wght axis range of the Pretendard source."""
+    if "fvar" not in font:
         raise RuntimeError(
-            "Pretendard source is variable/CFF2. Use a static Pretendard OTF file."
+            "Pretendard source is static. Point --input at PretendardVariable.ttf "
+            "so the Hangul stem can be matched to the Iosevka base."
         )
-    if "CFF " not in font:
-        raise RuntimeError("Pretendard source has neither glyf nor CFF outlines")
+    for axis in font["fvar"].axes:
+        if axis.axisTag == "wght":
+            return float(axis.minValue), float(axis.maxValue)
+    raise RuntimeError("Pretendard source has no wght axis to match the stem on")
 
-    glyph_set = font.getGlyphSet()
-    max_err = font["head"].unitsPerEm / 1000.0
-    glyphs: dict[str, object] = {}
 
-    for glyph_name in font.getGlyphOrder():
-        recording = DecomposingRecordingPen(glyph_set)
-        glyph_set[glyph_name].draw(recording)
-        pen = TTGlyphPen(None)
-        recording.replay(Cu2QuPen(pen, max_err=max_err, reverse_direction=True))
-        glyphs[glyph_name] = pen.glyph()
+def solve_wght(font: TTFont, low: float, high: float, target: float) -> float:
+    """Return the wght whose Hangul stem is `target` units wide.
 
-    for tag in ("CFF ", "CFF2", "VORG"):
-        if tag in font:
-            del font[tag]
+    The stem grows monotonically along the axis, so a bisection converges on it;
+    a target outside the axis clamps to the nearest end, which is what happens
+    at Thin, where Pretendard cannot be drawn as light as Iosevka.
+    """
 
-    builder = FontBuilder(font=font)
-    builder.isTTF = True
-    font.sfntVersion = "\x00\x01\x00\x00"
-    font["head"].glyphDataFormat = 0
-    builder.setupGlyf(glyphs)
-    builder.setupMaxp()
-    return "cff"
+    def stem(value: float) -> float:
+        return stroke_width(font, PRESEVKA_STEM_PROBE_HANGUL, location={"wght": value})
+
+    if stem(low) >= target:
+        return low
+    if stem(high) <= target:
+        return high
+    while high - low > 0.05:
+        mid = (low + high) / 2.0
+        if stem(mid) < target:
+            low = mid
+        else:
+            high = mid
+    return round((low + high) / 2.0, 1)
 
 
 def main() -> None:
@@ -85,14 +91,25 @@ def main() -> None:
         if "OS/2" not in base or "OS/2" not in source:
             raise RuntimeError("both base and donor must contain an OS/2 table")
         base_weight = int(base["OS/2"].usWeightClass)
-        source_weight = int(source["OS/2"].usWeightClass)
-        if base_weight != source_weight:
-            raise RuntimeError(
-                f"weight mismatch: Iosevka base is {base_weight}, "
-                f"Pretendard donor is {source_weight}"
-            )
+        axis_low, axis_high = weight_axis(source)
 
-        source_flavor = convert_cff_to_truetype(source)
+        # Match the stems before anything else: the horizontal fit further down
+        # widens every Hangul outline by PRESEVKA_HANGUL_OUTLINE_X_SCALE, and a
+        # vertical stem widens with it, so aim the axis that much lighter.
+        latin_stem = stroke_width(base, PRESEVKA_STEM_PROBE_LATIN)
+        target_stem = latin_stem / PRESEVKA_HANGUL_OUTLINE_X_SCALE
+        matched_wght = solve_wght(source, axis_low, axis_high, target_stem)
+        at_axis_floor = matched_wght <= axis_low
+
+        instancer.instantiateVariableFont(
+            source, {"wght": matched_wght}, inplace=True, updateFontNames=False
+        )
+        if "glyf" not in source:
+            raise RuntimeError("instantiated Pretendard has no glyf outlines")
+        # The instancer stamps round(matched_wght) into OS/2. This donor belongs
+        # to the Iosevka weight it was fitted to, and merge_fonts.py requires the
+        # two weight classes to agree.
+        source["OS/2"].usWeightClass = base_weight
 
         target_upem = int(base["head"].unitsPerEm)
         cell = latin_cell(base)
@@ -142,8 +159,9 @@ def main() -> None:
             if in_ranges(cp, ALL_HANGUL_RANGES) and name in hmtx.metrics
         }
 
-        # The source outlines changed, so source hints/signatures are no longer valid.
-        for tag in ("fpgm", "prep", "cvt ", "DSIG"):
+        # The source outlines changed, so source hints/signatures are no longer
+        # valid, and STAT describes a variable family this donor is no longer in.
+        for tag in ("fpgm", "prep", "cvt ", "DSIG", "STAT"):
             if tag in source:
                 del source[tag]
         source["glyf"].removeHinting()
@@ -252,12 +270,25 @@ def main() -> None:
                     "prepared donor ink envelope verification failed: "
                     f"expected radius {expected_ink_radius}, got {actual_ink_radius}"
                 )
+            hangul_stem = stroke_width(check, PRESEVKA_STEM_PROBE_HANGUL)
+            slack = stem_slack(latin_stem, at_axis_floor=at_axis_floor)
+            if abs(hangul_stem - latin_stem) > slack:
+                raise RuntimeError(
+                    f"prepared donor stem {hangul_stem:.1f} misses the Latin stem "
+                    f"{latin_stem:.1f} by more than {slack:.1f} units "
+                    f"(wght {matched_wght})"
+                )
         finally:
             check.close()
 
         report = {
-            "source_outline_flavor": source_flavor,
-            "weight_class": source_weight,
+            "weight_class": base_weight,
+            "source_weight_axis": [axis_low, axis_high],
+            "matched_wght": matched_wght,
+            "matched_wght_at_axis_floor": at_axis_floor,
+            "latin_stem": latin_stem,
+            "hangul_stem": hangul_stem,
+            "hangul_stem_ratio": hangul_stem / latin_stem,
             "source_upem": source_upem,
             "source_modern_hangul_advance": source_hangul_advance,
             "source_modern_hangul_em": source_hangul_advance / source_upem,
