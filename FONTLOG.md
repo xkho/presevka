@@ -17,13 +17,46 @@ The public family name and all user-visible naming records use `Presevka`.
 ## Upstream sources
 
 - Iosevka v34.9.0, copyright Renzhi Li / The Iosevka Project Authors.
-- Pretendard v1.3.9 static weights, copyright Kil Hyung-jin and the respective authors
-  of its upstream glyph designs.
+- Pretendard v1.3.9 variable font, copyright Kil Hyung-jin and the respective
+  authors of its upstream glyph designs.
 
 Exact notices and license terms are recorded in `OFL.txt` and
 `THIRD_PARTY.md`.
 
 ## ChangeLog
+
+### 20 October 2026 - Presevka 0.5.0 - Kwanho Lee (이관호)
+
+- Matched the Hangul stroke weight to the Latin one at every weight. Hangul now
+  comes from Pretendard's variable font rather than its nine static weights: for
+  each Iosevka weight the build measures the Latin stem (`|`), solves for the
+  `wght` whose Hangul stem (`ㅣ`) equals it, and instantiates Pretendard there.
+  Eight of the nine weights now land within one unit of their Latin stem, where
+  before the Hangul ran 3% to 60% heavier. The solved axis positions are 149.3
+  (ExtraLight), 278.9 (Light), 395.5 (Regular), 470.0 (Medium), 531.8
+  (SemiBold), 606.1 (Bold), 680.3 (ExtraBold) and 754.6 (Black).
+- Thin is the exception. Pretendard's `wght` axis stops at 45 and cannot be drawn
+  as light as Iosevka Thin, so Thin clamps to the axis floor: a 23-unit Hangul
+  stem against a 20-unit Latin one, down from 32.
+- Horizontal strokes still differ, by design. Pretendard draws its horizontals
+  lighter relative to its verticals than Iosevka does, so `ㅡ` measures 0.91 to
+  1.00 of Iosevka's `-` depending on weight. Matching those as well would mean
+  reshaping the Hangul outlines rather than choosing a point on an axis, so
+  Pretendard's own stroke contrast is left intact.
+- Hangul outlines no longer pass through a cubic-to-quadratic conversion. The
+  static Pretendard releases are CFF and the previous build converted them with
+  cu2qu; the variable font is already TrueType-flavoured, so its curves are used
+  as drawn.
+- Cell geometry, coverage and naming are unchanged: the 500/1000 advances, the
+  2% horizontal optical correction, 11,172 modern syllables and 53 compatibility
+  jamo all hold, and line and column counts in existing documents are unaffected.
+  Only the Hangul weight moved, which narrows the ink envelopes to 858-908 units
+  across the nine weights, where the heavier static weights reached 934.
+- Added a stem check to the donor stage and to final-font QA. The prepared donor
+  and every upright face must measure the same stem for `|` and `ㅣ`, within 2%
+  or two units, whichever is larger; Thin is allowed its axis-floor difference.
+  Italic faces are exempt because Iosevka slants `|` while the donated Hangul
+  stays upright, so the probe cannot be compared there.
 
 ### 19 October 2026 - Presevka 0.4.1 - Kwanho Lee (이관호)
 

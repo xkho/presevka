@@ -17,6 +17,9 @@ from font_utils import (
     PRESEVKA_LATIN_CELL,
     PRESEVKA_POST_ITALIC_ANGLE,
     PRESEVKA_SLOPES,
+    PRESEVKA_STEM_FLOOR_WEIGHTS,
+    PRESEVKA_STEM_PROBE_HANGUL,
+    PRESEVKA_STEM_PROBE_LATIN,
     PRESEVKA_VERSION,
     PRESEVKA_WEIGHTS,
     STRICT_HANGUL_RANGES,
@@ -25,6 +28,8 @@ from font_utils import (
     in_ranges,
     presevka_legacy_names,
     presevka_style_name,
+    stem_slack,
+    stroke_width,
 )
 
 
@@ -212,6 +217,28 @@ def main() -> None:
                 f"{actual_ink_width} >= {PRESEVKA_HANGUL_CELL}"
             )
 
+        # Hangul and Latin should read as one weight, so their bare vertical
+        # strokes must measure the same. Only the upright faces can be checked:
+        # Iosevka slants its bar in Italic while the donated Hangul stays
+        # upright, and the two outline sets are already compared glyph for glyph
+        # against the upright donor further down.
+        stem_summary = "not checked (italic)"
+        if args.slope == "Upright":
+            latin_stem = stroke_width(font, PRESEVKA_STEM_PROBE_LATIN)
+            hangul_stem = stroke_width(font, PRESEVKA_STEM_PROBE_HANGUL)
+            slack = stem_slack(
+                latin_stem, at_axis_floor=args.weight in PRESEVKA_STEM_FLOOR_WEIGHTS
+            )
+            if abs(hangul_stem - latin_stem) > slack:
+                raise RuntimeError(
+                    f"Hangul stem {hangul_stem:.1f} misses the Latin stem "
+                    f"{latin_stem:.1f} by more than {slack:.1f} units"
+                )
+            stem_summary = (
+                f"Hangul {hangul_stem:.1f} / Latin {latin_stem:.1f} "
+                f"= {hangul_stem / latin_stem:.2f}"
+            )
+
         style = presevka_style_name(args.weight, args.slope)
         full_name = args.family if style == "Regular" else f"{args.family} {style}"
         legacy_family, legacy_subfamily = presevka_legacy_names(
@@ -342,6 +369,7 @@ def main() -> None:
         print(f"Latin advance: {PRESEVKA_LATIN_CELL}")
         print(f"Hangul advance: {PRESEVKA_HANGUL_CELL}")
         print(f"Hangul ink envelope: {actual_ink_width:.1f}")
+        print(f"Stem match: {stem_summary}")
         print(f"Style: {style} ({args.weight_class})")
         print(f"Hinting: {hinting_summary}")
         print(f"Modern Hangul mappings: {len(modern)}")
