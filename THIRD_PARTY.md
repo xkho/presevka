@@ -14,7 +14,9 @@ licensed under the MIT License in `LICENSE-CODE`.
 - Reserved Font Names: none declared in the pinned version's `LICENSE.md`
 
 Presevka builds Iosevka with its default 500/1000-em unit width and its stock
-character variants; no stylistic set or character variant is overridden.
+character variants; no stylistic set or character variant is overridden. Its
+vertical metrics are overridden to Pretendard's, so the Latin and the Hangul
+share a cap height, x-height and optical centre.
 
 ## Pretendard
 

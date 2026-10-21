@@ -112,3 +112,16 @@ css = "italic"
 shape = 500
 menu = 5
 css = "normal"
+
+# Pretendard's own Latin vertical metrics, measured off Pretendard-Regular:
+# H, b, l and k all reach 707 and x reaches 530, where Iosevka draws them at
+# 735 and 520. Adopting them lines the Latin up with the Hangul it sits beside:
+# the two inks now share an optical centre to within 1.5 units rather than
+# 15.5, lowercase reaches 0.75 of the cap as it does in Inter and Pretendard,
+# and the cap lands at 0.81 of the Hangul's height, where Pretendard and Sarasa
+# Gothic both sit. Iosevka recomputes its horizontal strokes from these rather
+# than squashing the drawings, so the capitals stay evenly divided.
+[buildPlans.PresevkaBase500.metricOverride]
+cap = 707
+ascender = 707
+xHeight = 530
