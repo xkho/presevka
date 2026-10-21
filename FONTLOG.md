@@ -25,6 +25,19 @@ Exact notices and license terms are recorded in `OFL.txt` and
 
 ## ChangeLog
 
+### 21 October 2026 - Presevka 0.6.0 - Kwanho Lee (이관호)
+
+- Adopted Pretendard's Latin vertical metrics for the Iosevka base: cap height
+  735 to 707, x-height 520 to 530. The two scripts now share an optical centre
+  to within 1.5 units, where the Latin used to sit 15.5 units high.
+- Lowercase therefore reaches 0.75 of the cap height, the proportion Inter and
+  Pretendard both use, rather than Iosevka's 0.707. Most code is lowercase, so
+  it reads a little larger despite the shorter capitals.
+- The cap now stands at 0.81 of the Hangul's height, where Pretendard and
+  Sarasa Gothic both place it.
+- Advance widths, stroke weights, coverage and naming are unchanged, so line
+  and column counts hold and only the Latin's height moved.
+
 ### 20 October 2026 - Presevka 0.5.0 - Kwanho Lee (이관호)
 
 - Matched the Hangul stroke weight to the Latin one at every weight. Hangul now
