@@ -45,11 +45,19 @@ PRESEVKA_HANGUL_CELL = 1000
 PRESEVKA_HANGUL_OUTLINE_X_SCALE = 1.02
 
 # Stroke matching. Pretendard's Hangul is instantiated from its variable font at
-# the wght whose vertical stem equals the Iosevka base's, measured on these two
-# single-stroke probes: every other shared letter carries joins, curves or
-# terminals that a bounding box cannot tell apart from the stem itself.
+# the wght whose vertical stem hits PRESEVKA_HANGUL_STEM_RATIO of the Iosevka
+# base's, measured on these two single-stroke probes: every other shared letter
+# carries joins, curves or terminals that a bounding box cannot tell apart from
+# the stem itself.
 PRESEVKA_STEM_PROBE_LATIN = "|"
 PRESEVKA_STEM_PROBE_HANGUL = "\u3163"  # HANGUL LETTER I, one bare vertical stroke
+
+# Hangul is drawn lighter than the Latin it sits beside, not equal to it. A
+# syllable packs two or three jamo into one square, so at an equal stroke it
+# lays down more ink per area and reads darker. Pretendard answers this by
+# drawing its own Hangul at 0.92 of its Latin stem, and since 0.6.0 gave the
+# Latin Pretendard's cap height the same figure carries over directly.
+PRESEVKA_HANGUL_STEM_RATIO = 0.92
 
 # How far the two stems may end up apart: this fraction of the Latin stem, or
 # PRESEVKA_STEM_SLACK units, whichever is larger. Coordinates are rounded on the
@@ -59,9 +67,10 @@ PRESEVKA_STEM_TOLERANCE = 0.02
 PRESEVKA_STEM_SLACK = 2.0
 
 # Thin is the exception. Pretendard's wght axis stops at 45 and cannot be drawn
-# as light as Iosevka Thin, so its Hangul stem stays about a fifth heavier.
+# as light as Iosevka Thin, so its Hangul stem overshoots the target by about a
+# quarter: 23.9 units against the 18.4 the ratio asks for.
 PRESEVKA_STEM_FLOOR_WEIGHTS = ("Thin",)
-PRESEVKA_STEM_FLOOR_TOLERANCE = 0.25
+PRESEVKA_STEM_FLOOR_TOLERANCE = 0.30
 
 # Hinting stages, selected by the PRESEVKA_HINT environment variable.
 #   full  - ttfautohint over the merged font, so Hangul is hinted too
@@ -142,8 +151,13 @@ def stroke_width(font: TTFont, ch: str, *, location=None) -> float:
     return (x_max - x_min) / font["head"].unitsPerEm * 1000.0
 
 
+def target_hangul_stem(latin_stem: float) -> float:
+    """Return the Hangul stem that balances a given Latin stem."""
+    return latin_stem * PRESEVKA_HANGUL_STEM_RATIO
+
+
 def stem_slack(latin_stem: float, *, at_axis_floor: bool) -> float:
-    """Return how far a Hangul stem may sit from the Latin stem, in font units."""
+    """Return how far a Hangul stem may sit from its target, in font units."""
     fraction = (
         PRESEVKA_STEM_FLOOR_TOLERANCE if at_axis_floor else PRESEVKA_STEM_TOLERANCE
     )

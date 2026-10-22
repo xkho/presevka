@@ -26,6 +26,7 @@ from font_utils import (
     latin_cell,
     stem_slack,
     stroke_width,
+    target_hangul_stem,
 )
 
 
@@ -93,11 +94,13 @@ def main() -> None:
         base_weight = int(base["OS/2"].usWeightClass)
         axis_low, axis_high = weight_axis(source)
 
-        # Match the stems before anything else: the horizontal fit further down
-        # widens every Hangul outline by PRESEVKA_HANGUL_OUTLINE_X_SCALE, and a
-        # vertical stem widens with it, so aim the axis that much lighter.
+        # Match the stems before anything else. The target is a fraction of the
+        # Latin stem rather than the whole of it, and the horizontal fit further
+        # down widens every Hangul outline by PRESEVKA_HANGUL_OUTLINE_X_SCALE,
+        # taking a vertical stem with it, so aim the axis lighter again.
         latin_stem = stroke_width(base, PRESEVKA_STEM_PROBE_LATIN)
-        target_stem = latin_stem / PRESEVKA_HANGUL_OUTLINE_X_SCALE
+        wanted_stem = target_hangul_stem(latin_stem)
+        target_stem = wanted_stem / PRESEVKA_HANGUL_OUTLINE_X_SCALE
         matched_wght = solve_wght(source, axis_low, axis_high, target_stem)
         at_axis_floor = matched_wght <= axis_low
 
@@ -272,11 +275,11 @@ def main() -> None:
                 )
             hangul_stem = stroke_width(check, PRESEVKA_STEM_PROBE_HANGUL)
             slack = stem_slack(latin_stem, at_axis_floor=at_axis_floor)
-            if abs(hangul_stem - latin_stem) > slack:
+            if abs(hangul_stem - wanted_stem) > slack:
                 raise RuntimeError(
-                    f"prepared donor stem {hangul_stem:.1f} misses the Latin stem "
-                    f"{latin_stem:.1f} by more than {slack:.1f} units "
-                    f"(wght {matched_wght})"
+                    f"prepared donor stem {hangul_stem:.1f} misses its target "
+                    f"{wanted_stem:.1f} by more than {slack:.1f} units "
+                    f"(Latin {latin_stem:.1f}, wght {matched_wght})"
                 )
         finally:
             check.close()
@@ -287,6 +290,7 @@ def main() -> None:
             "matched_wght": matched_wght,
             "matched_wght_at_axis_floor": at_axis_floor,
             "latin_stem": latin_stem,
+            "target_hangul_stem": wanted_stem,
             "hangul_stem": hangul_stem,
             "hangul_stem_ratio": hangul_stem / latin_stem,
             "source_upem": source_upem,
