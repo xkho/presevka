@@ -38,7 +38,7 @@
 
 ## Iosevka 사용자화
 
-Presevka의 라틴 글자는 [Iosevka](https://github.com/be5invis/Iosevka)를 손대지 않고 그대로 씁니다. 그래서 Iosevka의 stylistic set 19종과 character variant 99종이 폰트 안에 함께 들어 있고, 다시 받거나 빌드하지 않아도 에디터 설정만으로 켜집니다. 예를 들어 Visual Studio Code 에서는 아래와 같습니다. 
+Presevka의 라틴 글자는 [Iosevka](https://github.com/be5invis/Iosevka)의 사용자화 로직을 그대로 사용합니다. 그래서 Iosevka의 stylistic set 19종과 character variant 99종이 폰트 안에 함께 들어 있고, 다시 받거나 빌드하지 않아도 에디터 설정만으로 켜집니다. 예를 들어 Visual Studio Code 에서는 아래와 같습니다. 
 자세한 Iosevka 사용자화 방법은 연결된 문서에서 확인해 보세요!
 
 ```jsonc
