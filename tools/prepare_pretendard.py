@@ -16,12 +16,13 @@ from font_utils import (
     ALL_HANGUL_RANGES,
     EXPECTED_MODERN_SYLLABLES,
     PRESEVKA_HANGUL_CELL,
-    PRESEVKA_HANGUL_OUTLINE_X_SCALE,
+    PRESEVKA_HANGUL_OUTLINE_SCALE,
     PRESEVKA_LATIN_CELL,
     PRESEVKA_STEM_PROBE_HANGUL,
     PRESEVKA_STEM_PROBE_LATIN,
     STRICT_HANGUL_RANGES,
     best_cmap,
+    glyph_bounds,
     in_ranges,
     latin_cell,
     stem_slack,
@@ -95,12 +96,12 @@ def main() -> None:
         axis_low, axis_high = weight_axis(source)
 
         # Match the stems before anything else. The target is a fraction of the
-        # Latin stem rather than the whole of it, and the horizontal fit further
-        # down widens every Hangul outline by PRESEVKA_HANGUL_OUTLINE_X_SCALE,
-        # taking a vertical stem with it, so aim the axis lighter again.
+        # Latin stem rather than the whole of it, and the fit further down
+        # enlarges every Hangul outline by PRESEVKA_HANGUL_OUTLINE_SCALE,
+        # taking its stems with it, so aim the axis lighter again.
         latin_stem = stroke_width(base, PRESEVKA_STEM_PROBE_LATIN)
         wanted_stem = target_hangul_stem(latin_stem)
-        target_stem = wanted_stem / PRESEVKA_HANGUL_OUTLINE_X_SCALE
+        target_stem = wanted_stem / PRESEVKA_HANGUL_OUTLINE_SCALE
         matched_wght = solve_wght(source, axis_low, axis_high, target_stem)
         at_axis_floor = matched_wght <= axis_low
 
@@ -200,16 +201,24 @@ def main() -> None:
                 int(getattr(glyph, "xMin", old_lsb + round(dx))),
             )
 
-        # Preserve Pretendard's original weight-dependent proportions while
-        # applying the same minimal 2% optical enlargement to every Hangul/Jamo
-        # outline. The remainder of the 1000-unit advance becomes side bearings.
+        # Enlarge every Hangul/Jamo outline in both directions, keeping
+        # Pretendard's proportions, and centre it in the 1000-unit advance; the
+        # remainder becomes side bearings.
+        #
+        # Vertically the block is placed rather than merely scaled. Hangul is
+        # drawn centred in its own square, not sitting on the Latin baseline, so
+        # what has to line up is the two inks' optical centres: the mean centre
+        # of the Hangul against half the Latin's cap height. Deriving it here
+        # keeps the two together when either the cap or the enlargement moves.
         fit_center = target_advance / 2.0
         strict_bounds = []
+        ink_centers = []
         for name in strict_names:
             glyph = glyf[name]
             glyph.recalcBounds(glyf)
             if getattr(glyph, "numberOfContours", 0) != 0:
                 strict_bounds.append((glyph.xMin, glyph.xMax))
+                ink_centers.append((glyph.yMin + glyph.yMax) / 2.0)
 
         if not strict_bounds:
             raise RuntimeError("no strict Hangul outlines available for ink fitting")
@@ -217,20 +226,24 @@ def main() -> None:
             fit_center - min(x_min for x_min, _ in strict_bounds),
             max(x_max for _, x_max in strict_bounds) - fit_center,
         )
-        outline_x_scale = PRESEVKA_HANGUL_OUTLINE_X_SCALE
-        expected_ink_radius = max_radius_before * outline_x_scale
+        outline_scale = PRESEVKA_HANGUL_OUTLINE_SCALE
+        ink_middle = sum(ink_centers) / len(ink_centers)
+        base_cap = glyph_bounds(base, best_cmap(base)[ord("H")])[3]
+        latin_middle = base_cap / 2.0
+        y_shift = latin_middle - ink_middle * outline_scale
+        expected_ink_radius = max_radius_before * outline_scale
         fit_glyph_set = source.getGlyphSet()
         for name in hangul_names:
             advance, _ = hmtx.metrics[name]
             center = advance / 2.0
-            x_shift = center * (1.0 - outline_x_scale)
+            x_shift = center * (1.0 - outline_scale)
             recording = DecomposingRecordingPen(fit_glyph_set)
             fit_glyph_set[name].draw(recording)
             pen = TTGlyphPen(None)
             recording.replay(
                 TransformPen(
                     pen,
-                    Transform(outline_x_scale, 0, 0, 1.0, x_shift, 0),
+                    Transform(outline_scale, 0, 0, outline_scale, x_shift, y_shift),
                 )
             )
             glyph = pen.glyph()
@@ -301,8 +314,11 @@ def main() -> None:
             "target_hangul_advance": target_advance,
             "target_hangul_em": target_advance / target_upem,
             "natural_max_ink_radius": max_radius_before,
-            "outline_x_scale": outline_x_scale,
-            "outline_x_change_percent": (outline_x_scale - 1.0) * 100.0,
+            "outline_scale": outline_scale,
+            "outline_change_percent": (outline_scale - 1.0) * 100.0,
+            "latin_cap": base_cap,
+            "hangul_ink_center": ink_middle * outline_scale + y_shift,
+            "latin_ink_center": latin_middle,
             "actual_hangul_ink_width": actual_ink_radius * 2,
             "strict_hangul_glyphs": len(strict_names),
             "all_importable_hangul_glyphs": len(hangul_names),
