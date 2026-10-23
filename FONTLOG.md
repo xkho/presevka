@@ -25,6 +25,19 @@ Exact notices and license terms are recorded in `OFL.txt` and
 
 ## ChangeLog
 
+### 23 October 2026 - Presevka 0.7.0 - Kwanho Lee (이관호)
+
+- Hangul is drawn at 0.92 of the Latin stem rather than matching it. A syllable
+  packs two or three jamo into one square, so at an equal stroke it reads
+  darker; Pretendard draws its own Hangul to the same ratio.
+- Enlarged every Hangul outline by 7%, in both directions. Pretendard draws for
+  an 864-unit advance and gets 1000 here, which had pushed the syllables of a
+  word apart until it stopped reading as one lump.
+- Restored Iosevka's 735 cap height, raising x-height to 551 for the 0.75 of
+  Inter and Pretendard. 0.6.0's 707 left too little room to enlarge the Hangul.
+- Advance widths, coverage and naming are unchanged, so line and column counts
+  hold.
+
 ### 21 October 2026 - Presevka 0.6.0 - Kwanho Lee (이관호)
 
 - Adopted Pretendard's Latin vertical metrics for the Iosevka base: cap height
