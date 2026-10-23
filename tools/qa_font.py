@@ -13,6 +13,7 @@ from font_utils import (
     PRESEVKA_DEFAULT_HINT_MODE,
     PRESEVKA_FONT_REVISION,
     PRESEVKA_HANGUL_CELL,
+    PRESEVKA_HANGUL_STEM_RATIO,
     PRESEVKA_HINT_MODES,
     PRESEVKA_LATIN_CELL,
     PRESEVKA_POST_ITALIC_ANGLE,
@@ -30,6 +31,7 @@ from font_utils import (
     presevka_style_name,
     stem_slack,
     stroke_width,
+    target_hangul_stem,
 )
 
 
@@ -217,8 +219,9 @@ def main() -> None:
                 f"{actual_ink_width} >= {PRESEVKA_HANGUL_CELL}"
             )
 
-        # Hangul and Latin should read as one weight, so their bare vertical
-        # strokes must measure the same. Only the upright faces can be checked:
+        # Hangul and Latin should read as one weight, which means the Hangul's
+        # bare vertical stroke lands at a set fraction of the Latin's rather
+        # than equalling it. Only the upright faces can be checked:
         # Iosevka slants its bar in Italic while the donated Hangul stays
         # upright, and the two outline sets are already compared glyph for glyph
         # against the upright donor further down.
@@ -226,17 +229,20 @@ def main() -> None:
         if args.slope == "Upright":
             latin_stem = stroke_width(font, PRESEVKA_STEM_PROBE_LATIN)
             hangul_stem = stroke_width(font, PRESEVKA_STEM_PROBE_HANGUL)
+            wanted = target_hangul_stem(latin_stem)
             slack = stem_slack(
                 latin_stem, at_axis_floor=args.weight in PRESEVKA_STEM_FLOOR_WEIGHTS
             )
-            if abs(hangul_stem - latin_stem) > slack:
+            if abs(hangul_stem - wanted) > slack:
                 raise RuntimeError(
-                    f"Hangul stem {hangul_stem:.1f} misses the Latin stem "
-                    f"{latin_stem:.1f} by more than {slack:.1f} units"
+                    f"Hangul stem {hangul_stem:.1f} misses its target "
+                    f"{wanted:.1f} by more than {slack:.1f} units "
+                    f"(Latin {latin_stem:.1f})"
                 )
             stem_summary = (
                 f"Hangul {hangul_stem:.1f} / Latin {latin_stem:.1f} "
-                f"= {hangul_stem / latin_stem:.2f}"
+                f"= {hangul_stem / latin_stem:.2f} (target "
+                f"{PRESEVKA_HANGUL_STEM_RATIO:.2f})"
             )
 
         style = presevka_style_name(args.weight, args.slope)

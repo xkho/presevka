@@ -19,7 +19,7 @@ def _font_revision(version: str) -> float:
 # Single source of truth. merge_fonts.py stamps these into every face and
 # qa_font.py verifies them, so a release bump only happens here and in
 # pyproject.toml.
-PRESEVKA_VERSION = "0.6.0"
+PRESEVKA_VERSION = "0.7.0"
 PRESEVKA_FONT_REVISION = _font_revision(PRESEVKA_VERSION)
 
 PRESEVKA_WEIGHTS = (
@@ -39,17 +39,36 @@ PRESEVKA_POST_ITALIC_ANGLE = -float(round(PRESEVKA_ITALIC_ANGLE))
 PRESEVKA_LATIN_CELL = 500
 PRESEVKA_HANGUL_CELL = 1000
 
-# Apply one minimal optical correction to every Pretendard weight while
-# preserving its original weight-dependent horizontal proportions. The
-# conventional full-em cell leaves the remainder as side bearings.
-PRESEVKA_HANGUL_OUTLINE_X_SCALE = 1.02
+# Enlarge every Hangul and Jamo outline by this much, in both directions, and
+# centre it in the full-em cell; the remainder becomes side bearings.
+#
+# The cell is 1000 units where Pretendard draws its Hangul for 864, so a
+# syllable that filled its square now floats in a wider one. That pushes the
+# syllables of a word apart until the word stops reading as one lump: against a
+# 500-unit space, the gap between words comes to 3.28 times the gap between
+# syllables, where Pretendard manages 3.66 and Sarasa Gothic 3.44. A 2%
+# enlargement brings it to 3.46 and the ink to 797 units, which is where Sarasa
+# sits, for 2% more height against the Latin.
+#
+# Scaling both directions rather than only the width is what keeps Pretendard's
+# proportions: widening alone thickened the vertical stems while leaving the
+# horizontals, which skewed the stroke contrast the donor was drawn with.
+PRESEVKA_HANGUL_OUTLINE_SCALE = 1.07
 
 # Stroke matching. Pretendard's Hangul is instantiated from its variable font at
-# the wght whose vertical stem equals the Iosevka base's, measured on these two
-# single-stroke probes: every other shared letter carries joins, curves or
-# terminals that a bounding box cannot tell apart from the stem itself.
+# the wght whose vertical stem hits PRESEVKA_HANGUL_STEM_RATIO of the Iosevka
+# base's, measured on these two single-stroke probes: every other shared letter
+# carries joins, curves or terminals that a bounding box cannot tell apart from
+# the stem itself.
 PRESEVKA_STEM_PROBE_LATIN = "|"
 PRESEVKA_STEM_PROBE_HANGUL = "\u3163"  # HANGUL LETTER I, one bare vertical stroke
+
+# Hangul is drawn lighter than the Latin it sits beside, not equal to it. A
+# syllable packs two or three jamo into one square, so at an equal stroke it
+# lays down more ink per area and reads darker. Pretendard answers this by
+# drawing its own Hangul at 0.92 of its Latin stem, and since 0.6.0 gave the
+# Latin Pretendard's cap height the same figure carries over directly.
+PRESEVKA_HANGUL_STEM_RATIO = 0.92
 
 # How far the two stems may end up apart: this fraction of the Latin stem, or
 # PRESEVKA_STEM_SLACK units, whichever is larger. Coordinates are rounded on the
@@ -59,9 +78,10 @@ PRESEVKA_STEM_TOLERANCE = 0.02
 PRESEVKA_STEM_SLACK = 2.0
 
 # Thin is the exception. Pretendard's wght axis stops at 45 and cannot be drawn
-# as light as Iosevka Thin, so its Hangul stem stays about a fifth heavier.
+# as light as Iosevka Thin, so its Hangul stem overshoots the target by about a
+# quarter: 23.9 units against the 18.4 the ratio asks for.
 PRESEVKA_STEM_FLOOR_WEIGHTS = ("Thin",)
-PRESEVKA_STEM_FLOOR_TOLERANCE = 0.25
+PRESEVKA_STEM_FLOOR_TOLERANCE = 0.30
 
 # Hinting stages, selected by the PRESEVKA_HINT environment variable.
 #   full  - ttfautohint over the merged font, so Hangul is hinted too
@@ -142,8 +162,13 @@ def stroke_width(font: TTFont, ch: str, *, location=None) -> float:
     return (x_max - x_min) / font["head"].unitsPerEm * 1000.0
 
 
+def target_hangul_stem(latin_stem: float) -> float:
+    """Return the Hangul stem that balances a given Latin stem."""
+    return latin_stem * PRESEVKA_HANGUL_STEM_RATIO
+
+
 def stem_slack(latin_stem: float, *, at_axis_floor: bool) -> float:
-    """Return how far a Hangul stem may sit from the Latin stem, in font units."""
+    """Return how far a Hangul stem may sit from its target, in font units."""
     fraction = (
         PRESEVKA_STEM_FLOOR_TOLERANCE if at_axis_floor else PRESEVKA_STEM_TOLERANCE
     )

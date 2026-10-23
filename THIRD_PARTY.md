@@ -13,10 +13,10 @@ licensed under the MIT License in `LICENSE-CODE`.
 - License: SIL Open Font License 1.1
 - Reserved Font Names: none declared in the pinned version's `LICENSE.md`
 
-Presevka builds Iosevka with its default 500/1000-em unit width and its stock
-character variants; no stylistic set or character variant is overridden. Its
-vertical metrics are overridden to Pretendard's, so the Latin and the Hangul
-share a cap height, x-height and optical centre.
+Presevka builds Iosevka with its default 500/1000-em unit width, its default
+cap height and its stock character variants; no stylistic set or character
+variant is overridden. Its x-height is raised from 520 to 551, the 0.75 of the
+cap height that Inter and Pretendard use.
 
 ## Pretendard
 
@@ -34,10 +34,10 @@ primary font name.
 
 Pretendard's variable font supplies every Hangul outline. For each Iosevka
 weight, Presevka measures that weight's Latin stem, instantiates Pretendard
-Variable at the `wght` whose Hangul stem matches it, normalizes the result to a
-1000-unit em, enlarges every Hangul outline horizontally by 2% around its
-center, places strict Hangul in a 1000-unit advance, and merges it into the
-matching Iosevka base.
+Variable at the `wght` whose Hangul stem reaches 0.92 of it, normalizes the
+result to a 1000-unit em, enlarges every Hangul outline by 7% in both
+directions, places strict Hangul in a 1000-unit advance centred on the Latin's
+optical centre, and merges it into the matching Iosevka base.
 
 ## Adwaita Fonts (optional build preset only)
 

@@ -1,6 +1,6 @@
 # Iosevka features
 
-Presevka의 라틴 글자는 [Iosevka](https://github.com/be5invis/Iosevka)를 손대지 않고 그대로 씁니다. Iosevka는 글자 하나하나에 대안 모양을 마련해 두고 그것을 OpenType 피처로 골라 쓰게 만든 고정폭 글꼴입니다. `0`에 점을 넣을지 사선을 그을지, `l`에 꼬리를 달지, `g`를 한 층으로 그릴지를 쓰는 사람이 정합니다.
+Presevka의 라틴 글자는 [Iosevka](https://github.com/be5invis/Iosevka)가 그린 것을 그대로 씁니다. 소문자 높이만 조금 올렸을 뿐 글자꼴은 손대지 않았습니다. Iosevka는 글자 하나하나에 대안 모양을 마련해 두고 그것을 OpenType 피처로 골라 쓰게 만든 고정폭 글꼴입니다. `0`에 점을 넣을지 사선을 그을지, `l`에 꼬리를 달지, `g`를 한 층으로 그릴지를 쓰는 사람이 정합니다.
 그 선택지가 **stylistic set 19종과 character variant 99종**으로 Presevka에 그대로 들어 있습니다. 폰트를 다시 받거나 빌드할 필요 없이 에디터 설정만으로 켜집니다.
 
 ### Stylistic sets
