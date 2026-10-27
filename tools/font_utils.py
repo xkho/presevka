@@ -19,7 +19,7 @@ def _font_revision(version: str) -> float:
 # Single source of truth. merge_fonts.py stamps these into every face and
 # qa_font.py verifies them, so a release bump only happens here and in
 # pyproject.toml.
-PRESEVKA_VERSION = "0.7.0"
+PRESEVKA_VERSION = "0.8.0"
 PRESEVKA_FONT_REVISION = _font_revision(PRESEVKA_VERSION)
 
 PRESEVKA_WEIGHTS = (
