@@ -113,18 +113,27 @@ shape = 500
 menu = 5
 css = "normal"
 
-# Iosevka's own cap height, with lowercase raised to the proportion Inter and
-# Pretendard use: 551 is 0.75 of 735, where Iosevka draws x at 520 for 0.707.
-# Most of any code is lowercase, so it reads larger for it.
+# Raised from Iosevka's own 735 so the Latin stands as tall against the Hangul
+# as Pretendard's does: 962 of Hangul over a cap of 792 is 1.215, which is the
+# 1.211 Pretendard keeps and the 1.215 Sarasa Gothic keeps. At 735 the same
+# Hangul reaches 1.309, which is D2Coding's figure rather than Pretendard's.
+# Lowercase follows at 0.75 of the cap, the proportion Inter and Pretendard
+# both use, where Iosevka draws x at 0.707; most of any code is lowercase.
+#
+# The cell stays 500, so the Latin grows upward and not outward, and o goes
+# from 0.695 of its height to 0.645. Holding that roundness would need the
+# side bearings at 0.71 of default rather than 0.95, which opens the counters
+# but takes too much of the gap between letters.
 #
 # 0.6.0 instead took Pretendard's 707/530 wholesale, to put the Latin's optical
 # centre on the Hangul's. That turned out to be the expensive way round: the
 # centres are a placement, handled where the Hangul is fitted, while the cap
-# governs how much the Hangul can be enlarged before it towers over the Latin.
-# At 735 a 7% enlargement leaves the Hangul at 1.24 of the cap, next to the
-# 1.21 Pretendard and Sarasa Gothic both keep; at 707 the same enlargement
-# reaches 1.29.
+# governs how the Hangul stands against the Latin.
 [buildPlans.PresevkaBase500.metricOverride]
-cap = 735
-ascender = 735
-xHeight = 551
+cap = 792
+ascender = 792
+xHeight = 594
+# Trim the side bearings a touch, so Iosevka draws into slightly more of the
+# cell. 0.7 opened the counters but cost too much of the gap between letters;
+# 0.95 is meant to be felt rather than seen.
+sb = 'default_sb * 1.05'

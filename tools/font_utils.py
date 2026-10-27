@@ -19,7 +19,7 @@ def _font_revision(version: str) -> float:
 # Single source of truth. merge_fonts.py stamps these into every face and
 # qa_font.py verifies them, so a release bump only happens here and in
 # pyproject.toml.
-PRESEVKA_VERSION = "0.7.0"
+PRESEVKA_VERSION = "0.8.0"
 PRESEVKA_FONT_REVISION = _font_revision(PRESEVKA_VERSION)
 
 PRESEVKA_WEIGHTS = (
@@ -42,18 +42,47 @@ PRESEVKA_HANGUL_CELL = 1000
 # Enlarge every Hangul and Jamo outline by this much, in both directions, and
 # centre it in the full-em cell; the remainder becomes side bearings.
 #
-# The cell is 1000 units where Pretendard draws its Hangul for 864, so a
-# syllable that filled its square now floats in a wider one. That pushes the
-# syllables of a word apart until the word stops reading as one lump: against a
-# 500-unit space, the gap between words comes to 3.28 times the gap between
-# syllables, where Pretendard manages 3.66 and Sarasa Gothic 3.44. A 2%
-# enlargement brings it to 3.46 and the ink to 797 units, which is where Sarasa
-# sits, for 2% more height against the Latin.
+# Pretendard draws its Hangul for an advance of 864 of its em where the cell
+# here is the full 1000, so 1000/864.26 = 1.1571 is the factor that would hand
+# the donor over with every ratio it was drawn with intact: its proportion, and
+# the 13.0% of the ink's width it leaves between one syllable and the next.
 #
-# Scaling both directions rather than only the width is what keeps Pretendard's
-# proportions: widening alone thickened the vertical stems while leaving the
-# horizontals, which skewed the stroke contrast the donor was drawn with.
-PRESEVKA_HANGUL_OUTLINE_SCALE = 1.07
+# That factor cannot be used, because Pretendard's own bold Hangul does not fit
+# Pretendard's own cell. Its ink envelope runs to 104.1% of the advance at
+# ExtraBold and 105.9% at Black, both on the same syllable, 뺐. A proportional
+# font may let ink cross the advance and theirs does; a monospace cell cannot.
+# Scaled proportionally, Black's ink would reach 6 units into the next cell and
+# two syllables would overlap.
+#
+# So the enlargement is as much of that fit as the heaviest weight can take.
+# Black binds it: 1.1434 brings its ink exactly to the cell wall, and this
+# leaves 6 units of air on each side of the widest syllable it draws. The
+# Hangul lands 2.4% short of Pretendard's own fitting -- a mean ink of 864x971
+# against the 765x860 it started from -- and the spacing comes to 15.7% of the
+# ink against Pretendard's 13.0%.
+#
+# Scaling both directions rather than only the width is what keeps the
+# proportion at the donor's 0.890. Reaching the same spacing by widening alone
+# took the syllables to 0.973, near enough square, and thickened the vertical
+# stems while leaving the horizontals; scaling both asks the solver below for a
+# lighter wght instead, which thins the two together.
+#
+# What it costs is height: 1.322 of the Latin cap, against the 1.216 Pretendard
+# keeps, 1.219 for Sarasa Gothic and 1.307 for D2Coding. The cause is not the
+# Hangul but the Latin. Pretendard's cap is 0.818 of its Hangul advance where
+# ours is 0.735, and matching that would need a cap of 818 units in a 500-unit
+# cell. On this grid the two cannot both be had, so every Korean monospace
+# picks a point on one line; this one buys spacing and pays in height.
+PRESEVKA_HANGUL_OUTLINE_SCALE = 1.1297
+
+# Then widen the Hangul alone, on top of that enlargement.
+#
+# 1.0, so nothing happens: the enlargement above already brings the spacing to
+# what Pretendard drew, and anything further here only flattens the syllables.
+# The factor is kept because the two scales are not interchangeable -- this one
+# thickens the vertical stems without the horizontals -- and a build that wants
+# to trade proportion for spacing has to say so separately from the fit.
+PRESEVKA_HANGUL_EXTRA_WIDTH = 1.0
 
 # Stroke matching. Pretendard's Hangul is instantiated from its variable font at
 # the wght whose vertical stem hits PRESEVKA_HANGUL_STEM_RATIO of the Iosevka
@@ -63,12 +92,25 @@ PRESEVKA_HANGUL_OUTLINE_SCALE = 1.07
 PRESEVKA_STEM_PROBE_LATIN = "|"
 PRESEVKA_STEM_PROBE_HANGUL = "\u3163"  # HANGUL LETTER I, one bare vertical stroke
 
-# Hangul is drawn lighter than the Latin it sits beside, not equal to it. A
-# syllable packs two or three jamo into one square, so at an equal stroke it
-# lays down more ink per area and reads darker. Pretendard answers this by
-# drawing its own Hangul at 0.92 of its Latin stem, and since 0.6.0 gave the
-# Latin Pretendard's cap height the same figure carries over directly.
-PRESEVKA_HANGUL_STEM_RATIO = 0.92
+# Hangul is drawn slightly heavier than the Latin it sits beside.
+#
+# Total ink says the opposite — a syllable packs two or three jamo into one
+# square — but the totals mislead, because the two scripts spread their ink
+# over different bands. Latin lowercase, which is most of any code, sits
+# between the baseline and the x-height; Hangul fills its square from the
+# descender to above the cap. Measured by band, Latin lays 0.33 of its cell
+# across 0 to 500 units where Hangul lays 0.21, so the Hangul reads pale
+# exactly where the eye is.
+#
+# 1.10 overshot: it put the Hangul at 0.79 of the Latin over that band
+# against D2Coding's 0.76, and widening the syllables added to it. 1.06
+# lands on 0.76. Matching it outright would take 1.43, far enough up
+# Pretendard's axis that Black's counters close; 1.10 leaves them at 0.64 of
+# the glyph box. Pretendard draws its own Hangul at 0.92 and D2Coding at 1.18,
+# so this sits between them. It also pulls Thin back towards the others:
+# Pretendard's axis stops at 45 and cannot go thinner, and against the higher
+# target that floor is 9% out rather than 36%.
+PRESEVKA_HANGUL_STEM_RATIO = 0.96
 
 # How far the two stems may end up apart: this fraction of the Latin stem, or
 # PRESEVKA_STEM_SLACK units, whichever is larger. Coordinates are rounded on the
@@ -78,10 +120,14 @@ PRESEVKA_STEM_TOLERANCE = 0.02
 PRESEVKA_STEM_SLACK = 2.0
 
 # Thin is the exception. Pretendard's wght axis stops at 45 and cannot be drawn
-# as light as Iosevka Thin, so its Hangul stem overshoots the target by about a
-# quarter: 23.9 units against the 18.4 the ratio asks for.
+# as light as Iosevka Thin, so its Hangul stem overshoots: 27 units against the
+# 19 the ratio asks for, a third heavier than the Latin it stands beside. The
+# overshoot is the axis floor multiplied by the enlargement above, so it grows
+# whenever the Hangul does, and this tolerance is only the accounting of a
+# limit in the donor rather than a target of ours. Thinning Thin's outlines is
+# the fix; until then the number here follows what the donor can actually do.
 PRESEVKA_STEM_FLOOR_WEIGHTS = ("Thin",)
-PRESEVKA_STEM_FLOOR_TOLERANCE = 0.30
+PRESEVKA_STEM_FLOOR_TOLERANCE = 0.40
 
 # Hinting stages, selected by the PRESEVKA_HINT environment variable.
 #   full  - ttfautohint over the merged font, so Hangul is hinted too

@@ -25,6 +25,32 @@ Exact notices and license terms are recorded in `OFL.txt` and
 
 ## ChangeLog
 
+### 27 October 2026 - Presevka 0.8.0 - Kwanho Lee (이관호)
+
+- Hangul is now scaled by the factor that maps Pretendard's own 864-unit
+  Hangul advance onto this font's 1000-unit cell, rather than by a figure
+  chosen for how it looked. Pretendard's bold Hangul overruns even Pretendard's
+  own advance, reaching 105.9% of it at Black, so the full factor cannot be
+  used in a monospace cell; this takes as much of it as the heaviest weight
+  holds. The syllables of a word now sit 16.6% of their ink apart, where 0.7.0
+  left 23.0% and Pretendard itself leaves 13.0%.
+- Dropped the separate horizontal widening. It had closed the same gap by
+  flattening the syllables to 0.915 of their height; scaling both directions
+  keeps Pretendard's own 0.888.
+- Hangul is drawn at 0.96 of the Latin stem rather than 0.92.
+- Raised the cap height from 735 to 792 and the x-height from 551 to 594, the
+  same 0.75 proportion. The Hangul now stands at 1.220 of the cap, which is the
+  1.211 Pretendard keeps and the 1.215 of Sarasa Gothic; against 0.7.0's cap it
+  would have towered at 1.314.
+- Widened the side bearings from 0.95 to 1.05 of Iosevka's default. The taller
+  lowercase had eaten the air between letters: measured against the x-height,
+  the gap had fallen to 0.178 where Iosevka keeps 0.215.
+- Advance widths, coverage and naming are unchanged, so line and column counts
+  hold.
+- Known limitation: at Thin the Hangul stem lands a third heavier than the
+  Latin. Pretendard's weight axis stops at 45 and cannot be drawn lighter, and
+  the enlargement multiplies what the axis floor leaves over.
+
 ### 23 October 2026 - Presevka 0.7.0 - Kwanho Lee (이관호)
 
 - Hangul is drawn at 0.92 of the Latin stem rather than matching it. A syllable
