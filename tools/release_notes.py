@@ -185,14 +185,19 @@ def compose(
 
 
 def trailing(text: str) -> str:
-    """Return GitHub's own list of changes, stripped of its heading.
+    """Return the compare link out of GitHub's generated notes, and nothing else.
 
-    It arrives titled "What's Changed" as an `h2`, which is both a rule across
-    the page and a second heading for something this body already has a
-    section for. The list and the link below it carry themselves.
+    What GitHub generates is a heading, a line per merged pull request, and a
+    link to the diff. The heading is a second title for something this body
+    already has a section for, and each pull request line says in English what
+    the summary above said in both languages, with the author's name attached
+    to a release only they publish. The diff link is the one part that is not
+    said anywhere else.
     """
-    body = re.sub(r"^#+\s*What's Changed\s*$", "", text, flags=re.MULTILINE)
-    return body.strip()
+    for line in text.splitlines():
+        if line.strip().startswith("**Full Changelog**"):
+            return line.strip()
+    return ""
 
 
 def parse_args() -> argparse.Namespace:
