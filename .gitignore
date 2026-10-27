@@ -13,6 +13,7 @@ dist/FONTLOG.md
 tools/render_banner.py
 tools/render_specimen.py
 tools/render_cells.py
+tools/render_codesample.py
 
 __pycache__/
 *.pyc
