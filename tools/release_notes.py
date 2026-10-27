@@ -47,24 +47,11 @@ IMAGE = """\
 </p>
 """
 
-# Left unwrapped on purpose. A release body is rendered the way a comment is,
-# where a single newline becomes a line break, so a paragraph hard-wrapped at
-# seventy columns arrives on the page broken at seventy columns.
-INTRO_KO = (
-    "Iosevka의 라틴에 Pretendard의 한글을 얹은 고정폭 글꼴입니다. "
-    "한글 한 칸이 라틴 두 칸에 정확히 대응하고, 아홉 굵기 모두에서 "
-    "한글과 라틴이 같은 굵기로 읽히도록 맞췄습니다."
-)
-
 INTRO_EN = (
     "A monospace font that sets Pretendard's Hangul against Iosevka's Latin. "
     "One Hangul cell is exactly two Latin cells, and at every one of the nine "
     "weights the two scripts are fitted to read as one weight."
 )
-
-# GitHub builds a heading's anchor from its text, so this is what the link at
-# the top has to point at.
-ENGLISH_ANCHOR = "english"
 
 TAIL_KO = """\
 개별 TTF 파일은 아래 assets 목록에서 따로 받을 수 있습니다.
@@ -134,17 +121,20 @@ def half(
     *,
     version: str,
     english: bool,
-    intro: str,
     summary: str | None,
     archives: list[str],
     image: str | None = None,
 ) -> list[str]:
     """Return one language's blocks, in the order they are read."""
-    parts = [intro.rstrip()]
+    parts = []
     if image:
         parts.append(image.rstrip())
     if summary:
-        parts.append(("### What changed" if english else "### 이번 변경") + "\n\n" + summary.strip())
+        parts.append(
+            ("### What changed" if english else "### 이번 변경")
+            + "\n\n"
+            + summary.strip()
+        )
     parts.append(
         ("### Downloads" if english else "### 다운로드")
         + "\n\n"
@@ -162,10 +152,15 @@ def compose(
     summary: str | None = None,
     summary_en: str | None = None,
     image_base: str | None = None,
-    intro: str | None = None,
-    intro_en: str | None = None,
     archives: list[str] | None = None,
 ) -> str:
+    """Korean, a rule, the same again in English.
+
+    No heading introduces either half and no sentence explains the font: the
+    page is titled with the version and the reader came here from somewhere
+    that already said what this is. A rule is enough to say the language has
+    changed, and it costs no line of type.
+    """
     if archives is None:
         archives = [f"Presevka-{version}-ttf.zip", f"Presevka-{version}-woff2.zip"]
     archives = [name for name in archives if name]
@@ -175,27 +170,29 @@ def compose(
         else None
     )
 
-    parts = [(intro or INTRO_KO).rstrip(), f"[Read this in English](#{ENGLISH_ANCHOR})"]
-    if image:
-        parts.append(image.rstrip())
-    parts += half(
-        version=version, english=False, intro="", summary=summary, archives=archives
-    )[1:]
-    parts.append("---")
-    parts.append("### English")
-    parts += half(
+    parts = half(
         version=version,
-        english=True,
-        intro=(intro_en or INTRO_EN),
-        summary=summary_en,
+        english=False,
+        summary=summary,
         archives=archives,
+        image=image,
+    )
+    parts.append("---")
+    parts += half(
+        version=version, english=True, summary=summary_en, archives=archives
     )
     return "\n\n".join(p for p in parts if p) + "\n"
 
 
-def demote_headings(text: str) -> str:
-    """Push GitHub's own `## What's Changed` down to match the rest."""
-    return re.sub(r"^##\s+(?!#)", "### ", text, flags=re.MULTILINE)
+def trailing(text: str) -> str:
+    """Return GitHub's own list of changes, stripped of its heading.
+
+    It arrives titled "What's Changed" as an `h2`, which is both a rule across
+    the page and a second heading for something this body already has a
+    section for. The list and the link below it carry themselves.
+    """
+    body = re.sub(r"^#+\s*What's Changed\s*$", "", text, flags=re.MULTILINE)
+    return body.strip()
 
 
 def parse_args() -> argparse.Namespace:
@@ -206,12 +203,6 @@ def parse_args() -> argparse.Namespace:
         help="이번에 무엇을 했는지 한두 문장. 수치는 FONTLOG에 두고 여기엔 쓰지 않습니다.",
     )
     p.add_argument("--summary-en", help="같은 내용의 영문.")
-    p.add_argument(
-        "--intro",
-        help="맨 앞에 올 소개. 생략하면 현재 판본을 설명하는 기본 문구를 씁니다. "
-        "옛 릴리스에는 그때 참이던 문장을 따로 넘겨야 합니다.",
-    )
-    p.add_argument("--intro-en", help="같은 소개의 영문.")
     p.add_argument(
         "--archive",
         action="append",
@@ -239,14 +230,12 @@ def main() -> None:
         args.summary,
         args.summary_en,
         args.image_base,
-        args.intro,
-        args.intro_en,
         args.archives,
     )
     if args.append and args.append.is_file():
-        extra = demote_headings(args.append.read_text(encoding="utf-8").strip())
+        extra = trailing(args.append.read_text(encoding="utf-8"))
         if extra:
-            body = body.rstrip() + "\n\n" + extra + "\n"
+            body = body.rstrip() + "\n\n---\n\n" + extra + "\n"
     if args.output:
         args.output.write_text(body, encoding="utf-8")
         print(f"release notes: {args.output}")
