@@ -103,7 +103,12 @@ USES = {
 }
 
 
-def downloads(archives: list[str], english: bool) -> str:
+# Where a release's own assets are served from. The name in the table is the
+# link, so the table is the download rather than a label for one further down.
+DOWNLOAD_URL = "https://github.com/xkho/presevka/releases/download/v{version}/{name}"
+
+
+def downloads(version: str, archives: list[str], english: bool) -> str:
     """Return the downloads table in one language."""
     if not archives:
         return NO_ARCHIVE_EN if english else NO_ARCHIVE_KO
@@ -120,12 +125,14 @@ def downloads(archives: list[str], english: bool) -> str:
             kind = "desktop"
         else:
             kind = "early"
-        rows.append(f"| `{name}` | {USES[kind][1 if english else 0]} |")
+        url = DOWNLOAD_URL.format(version=version, name=name)
+        rows.append(f"| [`{name}`]({url}) | {USES[kind][1 if english else 0]} |")
     return header + "\n" + "\n".join(rows)
 
 
 def half(
     *,
+    version: str,
     english: bool,
     intro: str,
     summary: str | None,
@@ -141,7 +148,7 @@ def half(
     parts.append(
         ("### Downloads" if english else "### 다운로드")
         + "\n\n"
-        + downloads(archives, english)
+        + downloads(version, archives, english)
     )
     if archives:
         parts.append((TAIL_EN if english else TAIL_KO).strip())
@@ -172,11 +179,12 @@ def compose(
     if image:
         parts.append(image.rstrip())
     parts += half(
-        english=False, intro="", summary=summary, archives=archives
+        version=version, english=False, intro="", summary=summary, archives=archives
     )[1:]
     parts.append("---")
     parts.append("### English")
     parts += half(
+        version=version,
         english=True,
         intro=(intro_en or INTRO_EN),
         summary=summary_en,
