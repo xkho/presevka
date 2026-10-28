@@ -16,6 +16,11 @@ on:
       - "config/**"
       - "scripts/**"
       - "tools/**"
+      # Not every tool under here feeds the font. These two build the preview
+      # page and compose a release body; neither changes a glyph, and a full
+      # Iosevka build plus hinting is over half an hour to prove that.
+      - "!tools/build_preview_fonts.py"
+      - "!tools/release_notes.py"
       - "LICENSE"
       - "LICENSE-CODE"
       - "OFL.txt"
@@ -28,6 +33,11 @@ on:
       - "config/**"
       - "scripts/**"
       - "tools/**"
+      # Not every tool under here feeds the font. These two build the preview
+      # page and compose a release body; neither changes a glyph, and a full
+      # Iosevka build plus hinting is over half an hour to prove that.
+      - "!tools/build_preview_fonts.py"
+      - "!tools/release_notes.py"
       - "LICENSE"
       - "LICENSE-CODE"
       - "OFL.txt"
