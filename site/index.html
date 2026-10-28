@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Presevka — 프리텐다드에 Iosevka를 합친 고정폭 글꼴</title>
+<meta name="description" content="한글 한 칸이 라틴 두 칸에 정확히 대응하는 코딩용 고정폭 글꼴. 아홉 굵기, Iosevka의 글자꼴 변형 그대로. 직접 쳐 보세요.">
+<link rel="icon" href="data:,">
+<script src="glyph-variants.js"></script>
+
+<!-- A specimen is set in a serif and shows its subject in the subject's own
+     face; that division is older than the web and it is why the page reads as
+     a showing rather than as a product site. Source Han Serif K is the one
+     serif that carries Korean and Latin in a single family at two weights. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500&display=swap">
+
+<style>
+/* Nine weights, each split so a browser pulls the Hangul of a weight only
+   when it has Hangul of that weight to draw. */
+@font-face{font-family:Presevka;font-weight:100;font-display:swap;src:url(fonts/Presevka-Thin.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:100;font-display:swap;src:url(fonts/Presevka-Thin.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:200;font-display:swap;src:url(fonts/Presevka-ExtraLight.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:200;font-display:swap;src:url(fonts/Presevka-ExtraLight.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:300;font-display:swap;src:url(fonts/Presevka-Light.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:300;font-display:swap;src:url(fonts/Presevka-Light.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:400;font-display:swap;src:url(fonts/Presevka-Regular.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:400;font-display:swap;src:url(fonts/Presevka-Regular.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:500;font-display:swap;src:url(fonts/Presevka-Medium.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:500;font-display:swap;src:url(fonts/Presevka-Medium.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:600;font-display:swap;src:url(fonts/Presevka-SemiBold.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:600;font-display:swap;src:url(fonts/Presevka-SemiBold.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:700;font-display:swap;src:url(fonts/Presevka-Bold.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:700;font-display:swap;src:url(fonts/Presevka-Bold.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:800;font-display:swap;src:url(fonts/Presevka-ExtraBold.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:800;font-display:swap;src:url(fonts/Presevka-ExtraBold.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:900;font-display:swap;src:url(fonts/Presevka-Black.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:900;font-display:swap;src:url(fonts/Presevka-Black.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+
+/* The italic too. Its Hangul stays upright, which is a decision this font
+   made and therefore something the page has to be able to show. */
+@font-face{font-family:Presevka;font-style:italic;font-weight:100;font-display:swap;src:url(fonts/Presevka-ThinItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:100;font-display:swap;src:url(fonts/Presevka-ThinItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:200;font-display:swap;src:url(fonts/Presevka-ExtraLightItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:200;font-display:swap;src:url(fonts/Presevka-ExtraLightItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:300;font-display:swap;src:url(fonts/Presevka-LightItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:300;font-display:swap;src:url(fonts/Presevka-LightItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:400;font-display:swap;src:url(fonts/Presevka-Italic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:400;font-display:swap;src:url(fonts/Presevka-Italic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:500;font-display:swap;src:url(fonts/Presevka-MediumItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:500;font-display:swap;src:url(fonts/Presevka-MediumItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:600;font-display:swap;src:url(fonts/Presevka-SemiBoldItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:600;font-display:swap;src:url(fonts/Presevka-SemiBoldItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:700;font-display:swap;src:url(fonts/Presevka-BoldItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:700;font-display:swap;src:url(fonts/Presevka-BoldItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:800;font-display:swap;src:url(fonts/Presevka-ExtraBoldItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:800;font-display:swap;src:url(fonts/Presevka-ExtraBoldItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:900;font-display:swap;src:url(fonts/Presevka-BlackItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-style:italic;font-weight:900;font-display:swap;src:url(fonts/Presevka-BlackItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+
+/* The weight showing draws all nine at once. Faces cut to its one line keep a
+   page load from pulling nine Hangul subsets before anyone has asked. */
+@font-face{font-family:PresevkaSpec;font-weight:100;font-display:swap;src:url(fonts/Presevka-Thin.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:200;font-display:swap;src:url(fonts/Presevka-ExtraLight.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:300;font-display:swap;src:url(fonts/Presevka-Light.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:400;font-display:swap;src:url(fonts/Presevka-Regular.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:500;font-display:swap;src:url(fonts/Presevka-Medium.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:600;font-display:swap;src:url(fonts/Presevka-SemiBold.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:700;font-display:swap;src:url(fonts/Presevka-Bold.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:800;font-display:swap;src:url(fonts/Presevka-ExtraBold.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:900;font-display:swap;src:url(fonts/Presevka-Black.spec.woff2)format("woff2")}
+
+/* Iosevka's own colours, read off its stylesheet. Dark is the ground because
+   that is where this font is used, not because the category prefers it; light
+   arrives only for a reader whose system asks for it, or who asks here.
+   Iosevka's own greys were drawn for its dark ground, so light mode carries
+   darker cousins: #646867 for small type at 5.5:1, and the cyan down to
+   #0078a3, which is the lightest it can be and still clear 4.5:1 on the
+   panels it sits on. */
+:root{
+  --ink:#101414; --paper:#171c1c; --fg:#c7cccb; --quiet:#8d9392;
+  --rule:#272c2c; --signal:#75f4ff;
+  --sel:rgba(117,244,255,.22);
+ 
+}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme=dark]){
+    --ink:#fcfcfc; --paper:#f2f4f4; --fg:#212525; --quiet:#646867;
+    --rule:#e0e4e3; --signal:#0078a3;
+    --sel:rgba(0,120,163,.18);
+   
+  }
+}
+:root[data-theme=light]{
+  --ink:#fcfcfc; --paper:#f2f4f4; --fg:#212525; --quiet:#646867;
+  --rule:#e0e4e3; --signal:#0078a3;
+  --sel:rgba(0,120,163,.18);
+ 
+}
+
+*{box-sizing:border-box}
+html{
+  -webkit-text-size-adjust:100%;
+  scrollbar-color:var(--rule) var(--ink);
+}
+::selection{background:var(--sel);color:var(--fg)}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--ink)}
+::-webkit-scrollbar-thumb{background:var(--rule);border:3px solid var(--ink)}
+::-webkit-scrollbar-thumb:hover{background:var(--quiet)}
+
+body{
+  margin:0;background:var(--ink);color:var(--fg);
+  font-family:"Noto Serif KR",Georgia,serif;
+  font-weight:400;font-size:15px;line-height:1.65;
+  font-synthesis:none;word-break:keep-all;
+  -webkit-font-smoothing:antialiased;
+}
+
+a{color:var(--signal);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+
+.page{max-width:66rem;margin:0 auto;padding:0 32px}
+
+/* ---------- hero: the claim, drawn ---------- */
+.hero{padding:6.5rem 0 5rem}
+/* The name, set in itself. The two it was made from go underneath, small,
+   where they read as a credit rather than competing with it. */
+.mark{
+  margin:0;text-align:center;font-family:Presevka,monospace;font-weight:400;
+  color:var(--fg);line-height:1;letter-spacing:0;
+  font-size:clamp(2.6rem,10vw,6rem);
+}
+.credit{
+  margin:1.2rem 0 0;font-size:15px;color:var(--quiet);
+  display:flex;align-items:center;justify-content:center;gap:.9rem;
+}
+.knob{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:1.9rem;height:1.9rem;padding:0;cursor:pointer;
+  background:none;border:1px solid var(--rule);color:var(--quiet);
+  transition:color .16s ease,border-color .16s ease;
+}
+.knob svg{
+  width:1rem;height:1rem;fill:none;stroke:currentColor;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+@media (hover:hover){
+  .knob:hover{color:var(--fg);border-color:var(--fg)}
+}
+.under{margin-top:2.4rem;text-align:center}
+.what{margin:0;font-size:15px;color:var(--quiet)}
+.cta{display:flex;flex-wrap:wrap;gap:.7rem;justify-content:center;align-items:stretch;margin-top:1.3rem}
+/* Squares with a drawn edge, lettered in the face they are offering. */
+.btn{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:.45rem 1.7rem;text-align:center;
+  font-family:Presevka,monospace;font-size:17px;font-weight:400;
+  border:1px solid var(--fg);color:var(--fg);
+  transition:color .16s ease,border-color .16s ease,background-color .16s ease;
+}
+@media (hover:hover){
+  .btn:hover{background:var(--fg);color:var(--ink);text-decoration:none}
+}
+.btn em{display:block;font-style:italic;font-size:12px;line-height:1.35;opacity:.6}
+
+/* ---------- the hanging margin ---------- */
+.band{
+  border-top:1px solid var(--rule);padding:3.4rem 0;
+  display:grid;grid-template-columns:9.5rem minmax(0,1fr);gap:0 2.75rem;
+}
+.margin{margin:0}
+.margin h2{
+  margin:0;font-size:17px;font-weight:500;line-height:1.35;letter-spacing:0;
+}
+.margin p{margin:.35rem 0 0;font-size:13px;line-height:1.5;color:var(--quiet)}
+.showing > :first-child{margin-top:0}
+.showing > :last-child{margin-bottom:0}
+.gloss{margin:1.4rem 0 0;font-size:15px;color:var(--quiet);max-width:34em;text-wrap:pretty}
+
+/* ---------- weights ---------- */
+.scroller{overflow-x:auto}
+.weights .name{position:sticky;left:0;background:var(--ink)}
+.weights{width:100%;border-collapse:collapse}
+.weights td{padding:.42rem 0;vertical-align:baseline;border:0}
+/* The number gets its own column so the nine of them read as a scale rather
+   than as nine ragged endings. */
+.weights .name{
+  width:8.5rem;font-size:13px;color:var(--quiet);white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.weights .name{display:flex;justify-content:space-between;gap:.75rem}
+.weights .name b{font-weight:400}
+.weights .line{
+  font-family:PresevkaSpec,Presevka,monospace;font-size:21px;white-space:nowrap;
+}
+
+/* ---------- the glyph table ---------- */
+.rack{
+  display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1.3rem;
+  margin:0 0 .9rem;
+}
+.tally{margin:0 0 0 auto;font-size:13px;color:var(--signal)}
+.tally:empty{display:none}
+
+/* One cell per character, small enough that the whole Latin side is one
+   glance. A cell the reader must scroll to is a cell they will not compare. */
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(2.35rem,1fr));
+  border-top:1px solid var(--rule);border-left:1px solid var(--rule);
+}
+.cellbox{
+  border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  font-family:Presevka,monospace;font-size:19px;line-height:1;
+  color:var(--fg);
+}
+/* The accent names what this set actually touches, which is the one thing a
+   reader cannot work out by looking at ninety characters. The grid keeps its
+   own edges: a cell that moved its border would shift the whole rank. */
+.cellbox.on{color:var(--signal)}
+@media (hover:hover){
+  .cellbox:hover{background:var(--fg);color:var(--ink)}
+  .cellbox.on:hover{background:var(--signal);color:var(--ink)}
+}
+
+.liga-row{
+  margin:.85rem 0 0;font-family:Presevka,monospace;font-size:21px;
+  color:var(--fg);
+}
+
+select{
+  background:var(--ink);color:var(--fg);border:1px solid var(--rule);
+  padding:.32rem .5rem;font-family:inherit;font-size:13px;max-width:15rem;
+}
+.check{display:inline-flex;align-items:center;gap:.45rem;font-size:13px;color:var(--quiet);cursor:pointer}
+.check input{accent-color:var(--signal);margin:0}
+
+/* ---------- the box ---------- */
+#stage{
+  width:100%;border:1px solid var(--rule);
+  background:var(--paper);color:var(--fg);caret-color:var(--signal);
+  padding:1.3rem 1.5rem;margin:0;white-space:pre-wrap;overflow-wrap:break-word;
+  outline:none;min-height:14rem;
+  font-family:Presevka,ui-monospace,monospace;
+  font-size:19px;font-weight:400;line-height:1.6;word-break:normal;
+  transition:border-color .16s ease;
+}
+#stage:focus{border-color:var(--signal)}
+/* Switches on the left, dials on the right, each stacked: a reader scanning
+   for one of them looks down a column instead of across a row. */
+.panel{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1.2rem 2.5rem;margin-top:1.1rem}
+.dials{display:flex;flex-direction:column;gap:.55rem;min-width:19rem}
+.dial{display:flex;align-items:center;gap:.6rem;font-size:13px;color:var(--quiet)}
+.dial > span{flex:0 0 auto;min-width:3.2rem}
+.dial input[type=range]{flex:1;min-width:0;accent-color:var(--signal)}
+.dial output{flex:0 0 3.2rem;text-align:right;color:var(--fg);font-variant-numeric:tabular-nums}
+.flags{display:flex;flex-wrap:wrap;gap:1.3rem;margin-top:.9rem}
+
+/* ---------- colophon ---------- */
+footer{
+  border-top:1px solid var(--rule);margin-top:1rem;padding:2.2rem 0 4rem;
+  font-size:12px;line-height:1.8;color:var(--quiet);
+}
+footer p{margin:0 0 .8rem;max-width:48em;word-break:normal}
+footer p span{display:block}
+footer p:last-child{margin-bottom:0}
+footer a{color:var(--quiet);text-decoration:underline;text-underline-offset:2px}
+footer a:hover{color:var(--signal)}
+
+@media (max-width:52rem){
+  .page{padding:0 20px}
+  .hero{padding:3.5rem 0 3rem}
+  .band{grid-template-columns:minmax(0,1fr);gap:1.1rem;padding:2.6rem 0}
+  .margin p{display:inline;margin-left:.5rem}
+  .margin h2{display:inline}
+  .weights .name{width:7rem;font-size:12px;padding-right:.6rem}
+  .weights .line{font-size:15px}
+  #stage{font-size:17px;padding:1.05rem 1.15rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<main class="page">
+
+  <div class="hero">
+    <p class="mark">Presevka</p>
+    <p class="credit">프리텐다드 &times; Iosevka<button class="knob" type="button" id="theme"
+      aria-label="테마 바꾸기"><svg viewBox="0 0 24 24" aria-hidden="true" id="knobIcon"></svg></button></p>
+    <div class="under">
+      <p class="what">코딩용 고정폭 글꼴</p>
+      <div class="cta">
+        <a class="btn" href="https://github.com/xkho/presevka/releases/latest">Download<em id="ver"></em></a>
+        <a class="btn" href="https://github.com/xkho/presevka">GitHub</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="band">
+    <div class="margin">
+      <h2>굵기</h2>
+      <p>Thin 100 – Black 900</p>
+    </div>
+    <div class="showing">
+      <div class="scroller"><table class="weights"><tbody id="weights"></tbody></table></div>
+      <p class="gloss">굵기마다 한글 획을 라틴에 맞춰 그렸습니다.</p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="margin">
+      <h2>글자꼴</h2>
+      <p>stylistic set 19종</p>
+    </div>
+    <div class="showing">
+      <div class="rack">
+        <select id="ss" aria-label="스타일 세트"></select>
+        <p class="tally" id="tally" role="status"></p>
+      </div>
+      <div class="grid" id="grid" aria-label="글자 보임판"></div>
+      <p class="gloss">라틴은 Iosevka를 그대로 가져다 변형해 사용합니다. <br>제공되는 글자꼴들은 폰트 안에
+        들어 있어 에디터 설정만으로 켜집니다. <br>Iosevka에서 제공하는 다양한 글자꼴들을 사용해 보세요.</p>
+    </div>
+  </section>
+
+  <section class="band" id="try">
+    <div class="margin">
+      <h2>시험</h2>
+      <p>고쳐 쓰셔도 됩니다</p>
+    </div>
+    <div class="showing">
+<div id="stage" contenteditable="true" spellcheck="false" role="textbox" aria-multiline="true" aria-label="글꼴 시험 상자">#include &lt;vector&gt;
+
+/* 평균 구해주는 함수 만들기 */
+double average(const std::vector&lt;double&gt;&amp; readings) {
+  double sum = 0.0;
+  int count = 0;
+
+  for (double c : readings) {
+    sum += c; // 원소 합 구하기
+    ++count; // 원소 개수 추가하기
+  }
+
+  return count &gt; 0 ? sum / count : 0.0;  // 0으로 나누지 않도록 막기
+}</div>
+      <div class="liga-row" id="ligaRow">-&gt; =&gt; != &lt;= &gt;= === !== |&gt; ++ :: /* */</div>
+      <div class="panel">
+        <div class="flags">
+          <label class="check"><input type="checkbox" id="pLiga" checked> Ligatures </label>
+          <label class="check"><input type="checkbox" id="pItalic"> Italic </label>
+        </div>
+        <div class="dials">
+          <label class="dial"><span>크기</span>
+            <input type="range" id="size" min="11" max="40" value="14"><output for="size">14px</output></label>
+          <label class="dial"><span>굵기</span>
+            <input type="range" id="weight" min="100" max="900" step="100" value="400"><output for="weight">400</output></label>
+          <label class="dial"><span>줄 간격</span>
+            <input type="range" id="lh" min="1" max="2.4" step="0.05" value="1.6"><output for="lh">1.60</output></label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p><span>The fonts and modifications to them are under the
+      <a href="https://github.com/xkho/presevka/blob/main/OFL.txt">SIL Open Font License 1.1</a>;
+      the builder is <a href="https://github.com/xkho/presevka/blob/main/LICENSE-CODE">MIT</a>.</span>
+      <span>Free to use, commercial work included.</span></p>
+    <p><span>Presevka is an independent font, not an official release of
+      <a href="https://github.com/be5invis/Iosevka">Iosevka</a> or
+      <a href="https://github.com/orioncactus/pretendard">Pretendard</a>.</span>
+      <span>If you want an Iosevka-derived family with Hangul, look at
+      <a href="https://github.com/be5invis/Sarasa-Gothic">Sarasa Gothic</a> as well.</span></p>
+    <p><span>The faces on this page are preview cuts with the hinting removed.</span>
+      <span>Take the installable ones from the download.</span></p>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  var SETS = [
+    ['', '기본 — Iosevka'],
+    ['ss01', 'ss01 — Andale Mono'], ['ss02', 'ss02 — Anonymous Pro'],
+    ['ss03', 'ss03 — Consolas'], ['ss04', 'ss04 — Menlo'],
+    ['ss05', 'ss05 — Fira Mono'], ['ss06', 'ss06 — Liberation Mono'],
+    ['ss07', 'ss07 — Monaco'], ['ss08', 'ss08 — Pragmata Pro'],
+    ['ss09', 'ss09 — Source Code Pro'], ['ss10', 'ss10 — Envy Code R'],
+    ['ss11', 'ss11 — X Windows Fixed'], ['ss12', 'ss12 — Ubuntu Mono'],
+    ['ss13', 'ss13 — Lucida'], ['ss14', 'ss14 — JetBrains Mono'],
+    ['ss15', 'ss15 — IBM Plex Mono'], ['ss16', 'ss16 — PT Mono'],
+    ['ss17', 'ss17 — Recursive'], ['ss18', 'ss18 — Input Mono'],
+    ['ss20', 'ss20 — Curly']
+  ];
+  function fill(sel) {
+    SETS.forEach(function (s) {
+      var o = document.createElement('option');
+      o.value = s[0]; o.textContent = s[1]; sel.appendChild(o);
+    });
+  }
+  function featureString(parts) {
+    return parts.length ? parts.join(', ') : 'normal';
+  }
+
+  /* ---------- the glyph table ---------- */
+  var ss = document.getElementById('ss');
+  var grid = document.getElementById('grid');
+  var tally = document.getElementById('tally');
+  fill(ss);
+
+  var cells = [];
+  var changes = {};
+
+  function paint() {
+    var parts = [];
+    if (ss.value) parts.push('"' + ss.value + '" 1');
+    grid.style.fontFeatureSettings = featureString(parts);
+
+    // Which characters this setting actually swaps, read from the font at
+    // build time. Nothing in the browser can answer that question.
+    var hit = {};
+    var list = ss.value && changes[ss.value];
+    if (list) for (var i = 0; i < list.length; i += 1) hit[list[i]] = true;
+    var n = 0;
+    cells.forEach(function (cell) {
+      var on = !!hit[cell.textContent];
+      cell.classList.toggle('on', on);
+      if (on) n += 1;
+    });
+    tally.textContent = n ? n + '자가 바뀝니다' : '';
+  }
+
+  var data = window.PRESEVKA_GLYPHS;
+  if (data && data.version) document.getElementById('ver').textContent = 'v' + data.version;
+  if (data) {
+    changes = data.changes || {};
+    var chars = data.characters || '';
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < chars.length; i += 1) {
+      var cell = document.createElement('div');
+      cell.className = 'cellbox';
+      cell.textContent = chars[i];
+      frag.appendChild(cell);
+      cells.push(cell);
+    }
+    grid.appendChild(frag);
+    // A set named in the address is a set someone sent you.
+    var asked = (location.hash || '').match(/ss\d\d/);
+    if (asked && changes[asked[0]]) ss.value = asked[0];
+    paint();
+  } else {
+    grid.remove();
+  }
+
+  ss.addEventListener('change', function () { paint(); dress(); });
+
+  /* ---------- the box ---------- */
+  var stage = document.getElementById('stage');
+  var pLiga = document.getElementById('pLiga');
+  var pItalic = document.getElementById('pItalic');
+  var ligaRow = document.getElementById('ligaRow');
+
+  // The box follows the set chosen above it. Two pickers for one choice is a
+  // way to end up with the page disagreeing with itself.
+  function dress() {
+    var off = '"calt" 0, "liga" 0, "dlig" 0';
+    var parts = [];
+    if (ss.value) parts.push('"' + ss.value + '" 1');
+    if (!pLiga.checked) parts.push(off);
+    stage.style.fontFeatureSettings = featureString(parts);
+    ligaRow.style.fontFeatureSettings = pLiga.checked ? 'normal' : off;
+    stage.style.fontStyle = pItalic.checked ? 'italic' : 'normal';
+  }
+  pLiga.addEventListener('change', dress);
+  pItalic.addEventListener('change', dress);
+  dress();
+
+  function dial(id, apply, fmt) {
+    var el = document.getElementById(id);
+    var out = el.parentNode.querySelector('output');
+    function run() { apply(el.value); out.textContent = fmt(el.value); }
+    el.addEventListener('input', run); run();
+  }
+  dial('size', function (v) { stage.style.fontSize = v + 'px'; },
+       function (v) { return v + 'px'; });
+  dial('weight', function (v) { stage.style.fontWeight = v; },
+       function (v) { return v; });
+  dial('lh', function (v) { stage.style.lineHeight = v; },
+       function (v) { return Number(v).toFixed(2); });
+
+  /* ---------- the switch ---------- */
+  // Drawn, at one stroke weight, rather than borrowed from the emoji table.
+  var SUN = '<circle cx="12" cy="12" r="4.1"/><path d="M12 2.6v2.2M12 19.2v2.2'
+    + 'M4.3 4.3l1.6 1.6M18.1 18.1l1.6 1.6M2.6 12h2.2M19.2 12h2.2'
+    + 'M4.3 19.7l1.6-1.6M18.1 5.9l1.6-1.6"/>';
+  var MOON = '<path d="M20.2 14.6A8.6 8.6 0 0 1 9.4 3.8a8.6 8.6 0 1 0 10.8 10.8z"/>';
+
+  var root = document.documentElement;
+  var knob = document.getElementById('theme');
+  var icon = document.getElementById('knobIcon');
+  function isDark() {
+    var set = root.getAttribute('data-theme');
+    if (set) return set === 'dark';
+    return !window.matchMedia('(prefers-color-scheme: light)').matches;
+  }
+  function show() {
+    // The icon names where the switch will take you, not where you are.
+    var toLight = isDark();
+    icon.innerHTML = toLight ? SUN : MOON;
+    knob.setAttribute('aria-label', toLight ? '밝게 보기' : '어둡게 보기');
+  }
+  try {
+    var saved = localStorage.getItem('presevka-theme');
+    if (saved) root.setAttribute('data-theme', saved);
+  } catch (e) {}
+  show();
+  knob.addEventListener('click', function () {
+    root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
+    try { localStorage.setItem('presevka-theme', root.getAttribute('data-theme')); } catch (e) {}
+    show();
+  });
+
+  /* ---------- the weight showing ---------- */
+  var NAMES = [[100, 'Thin'], [200, 'ExtraLight'], [300, 'Light'],
+               [400, 'Regular'], [500, 'Medium'], [600, 'SemiBold'],
+               [700, 'Bold'], [800, 'ExtraBold'], [900, 'Black']];
+  var body = document.getElementById('weights');
+  NAMES.forEach(function (w) {
+    var tr = document.createElement('tr');
+    var name = document.createElement('td');
+    name.className = 'name';
+    var word = document.createElement('span');
+    word.textContent = w[1];
+    var num = document.createElement('b');
+    num.textContent = w[0];
+    name.appendChild(word); name.appendChild(num);
+    var line = document.createElement('td');
+    line.className = 'line'; line.style.fontWeight = w[0];
+    line.textContent = 'float Fox.quick(h){ is_brown } // 다람쥐 헌 쳇바퀴에 타고파';
+    tr.appendChild(name); tr.appendChild(line); body.appendChild(tr);
+  });
+
+})();
+</script>
+</body>
+</html>
