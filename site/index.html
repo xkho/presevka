@@ -117,11 +117,12 @@ a:hover{text-decoration:underline;text-underline-offset:3px;text-decoration-thic
   display:flex;flex-direction:column;font-family:Presevka,monospace;
   font-weight:400;line-height:1.1;white-space:nowrap;
 }
-.src{margin:0;font-size:clamp(1.6rem,5.6vw,3.6rem)}
+.src{margin:0;font-size:clamp(2rem,7.2vw,4.9rem)}
 .from{align-self:flex-start}
 .into{align-self:flex-end}
+/* The name sits over the two it came from, so it paints last. */
 .name{
-  margin:-.12em 0;align-self:center;color:var(--fg);
+  margin:-.3em 0;align-self:center;color:var(--fg);position:relative;z-index:1;
   font-size:clamp(2.4rem,8.8vw,5.6rem);
 }
 /* Three steps, not two: the name solid, the surviving syllables held back,
