@@ -52,7 +52,8 @@ jobs:
         run: |
           uv run --with 'fonttools[woff]>=4.63.0' --with brotli --with 'uharfbuzz>=0.56.0' \
             python tools/build_preview_fonts.py \
-            --font-dir build/webfonts --output-dir site/fonts
+            --font-dir build/webfonts --output-dir site/fonts \
+            --slopes Upright,Italic
           du -sh site/fonts
 
       # Turns Pages on the first time this runs, so the site does not need

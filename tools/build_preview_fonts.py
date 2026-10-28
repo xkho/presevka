@@ -31,16 +31,15 @@ able to switch them on.
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
-
-import json
 
 import uharfbuzz as hb
 from fontTools.subset import main as pyftsubset
 from fontTools.ttLib import TTFont
 
-from font_utils import PRESEVKA_WEIGHTS
+from font_utils import PRESEVKA_VERSION, PRESEVKA_WEIGHTS
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -73,9 +72,8 @@ TABLE = (
     "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
 )
 
-# Every stylistic set Iosevka ships, plus the slashed zero, which the page
-# offers as its own switch.
-FEATURES = [f"ss{n:02d}" for n in range(1, 21) if n != 19] + ["zero"]
+# Every stylistic set Iosevka ships. There is no ss19.
+FEATURES = [f"ss{n:02d}" for n in range(1, 21) if n != 19]
 
 
 def changed_by(path: Path) -> dict[str, str]:
@@ -194,7 +192,14 @@ def main() -> None:
         tt.save(plain)
         tt.close()
         regular = plain
-    table = {"characters": TABLE, "changes": changed_by(regular)}
+    # The page offers a download, so a version it states has to be the one it
+    # would actually hand over. The build fills it rather than the markup
+    # carrying a number that goes stale on the next release.
+    table = {
+        "version": PRESEVKA_VERSION,
+        "characters": TABLE,
+        "changes": changed_by(regular),
+    }
     if regular.name == "_regular.ttf":
         regular.unlink()
     # A script tag rather than a fetch: the grid is then built before first
