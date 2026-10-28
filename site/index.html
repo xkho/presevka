@@ -42,20 +42,30 @@
 @font-face{font-family:PresevkaSpec;font-weight:700;font-display:swap;src:url(fonts/Presevka-Bold.spec.woff2)format("woff2")}
 @font-face{font-family:PresevkaSpec;font-weight:800;font-display:swap;src:url(fonts/Presevka-ExtraBold.spec.woff2)format("woff2")}
 @font-face{font-family:PresevkaSpec;font-weight:900;font-display:swap;src:url(fonts/Presevka-Black.spec.woff2)format("woff2")}
+/* Iosevka's own colours, from its site and from the weight sample its README
+   shows. The README specimens were already drawn in them so the two would sit
+   together; this page had been using GitHub's instead, which made it the one
+   piece of the project that did not match. The near-black and the greys carry
+   a slight green cast, which is what keeps them from reading as a default
+   stylesheet.
+
+   Two are changed, and only because they were made for a dark background:
+   #6e7372 falls to 3.85:1 on #101414, so dark mode takes #acb0b0 instead, and
+   the cyan and blue both wash out on white, so light mode darkens the blue to
+   #007da9. Everything here clears 4.5:1 against the background it meets. */
 :root{
-  --bg:#ffffff; --fg:#1f2328; --muted:#59636e; --line:#d1d9e0;
-  --field:#f6f8fa; --accent:#0969da; --code-bg:#f6f8fa;
+  --bg:#fcfcfc; --fg:#212525; --muted:#6e7372; --line:#d8dcdb;
+  --field:#f2f4f4; --accent:#007da9; --code-bg:#f2f4f4;
 }
-:root:not([data-theme=light]) @media (prefers-color-scheme:dark){}
 @media (prefers-color-scheme:dark){
   :root:not([data-theme=light]){
-    --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#3d444d;
-    --field:#151b23; --accent:#4493f8; --code-bg:#151b23;
+    --bg:#101414; --fg:#c7cccb; --muted:#acb0b0; --line:#333737;
+    --field:#212525; --accent:#75f4ff; --code-bg:#212525;
   }
 }
 :root[data-theme=dark]{
-  --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#3d444d;
-  --field:#151b23; --accent:#4493f8; --code-bg:#151b23;
+  --bg:#101414; --fg:#c7cccb; --muted:#acb0b0; --line:#333737;
+  --field:#212525; --accent:#75f4ff; --code-bg:#212525;
 }
 
 *{box-sizing:border-box}
@@ -78,7 +88,7 @@ h1{font-size:2.25rem;font-weight:700;margin:0 0 .4rem;letter-spacing:-.01em}
   border:1px solid var(--line);color:var(--fg);text-decoration:none;
   font-size:.9rem;font-weight:500;background:var(--field);
 }
-.btn.primary{background:var(--accent);border-color:transparent;color:#fff}
+.btn.primary{background:var(--accent);border-color:transparent;color:var(--bg)}
 .btn:hover{border-color:var(--accent)}
 
 h2{font-size:1.05rem;font-weight:600;margin:2.5rem 0 .75rem}
