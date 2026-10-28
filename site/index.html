@@ -38,26 +38,18 @@
 @font-face{font-family:Presevka;font-weight:900;font-display:swap;src:url(fonts/Presevka-Black.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
 @font-face{font-family:Presevka;font-weight:900;font-display:swap;src:url(fonts/Presevka-Black.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
 
-/* The italic too. Its Hangul stays upright, which is a decision this font
-   made and therefore something the page has to be able to show. */
+/* The italic, Latin only. This font does not slant its Hangul, so an italic
+   face's syllables are byte-for-byte the upright ones; letting the upright
+   face serve that range is the same glyph, not a substitute. */
 @font-face{font-family:Presevka;font-style:italic;font-weight:100;font-display:swap;src:url(fonts/Presevka-ThinItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
-@font-face{font-family:Presevka;font-style:italic;font-weight:100;font-display:swap;src:url(fonts/Presevka-ThinItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
 @font-face{font-family:Presevka;font-style:italic;font-weight:200;font-display:swap;src:url(fonts/Presevka-ExtraLightItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
-@font-face{font-family:Presevka;font-style:italic;font-weight:200;font-display:swap;src:url(fonts/Presevka-ExtraLightItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
 @font-face{font-family:Presevka;font-style:italic;font-weight:300;font-display:swap;src:url(fonts/Presevka-LightItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
-@font-face{font-family:Presevka;font-style:italic;font-weight:300;font-display:swap;src:url(fonts/Presevka-LightItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
 @font-face{font-family:Presevka;font-style:italic;font-weight:400;font-display:swap;src:url(fonts/Presevka-Italic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
-@font-face{font-family:Presevka;font-style:italic;font-weight:400;font-display:swap;src:url(fonts/Presevka-Italic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
 @font-face{font-family:Presevka;font-style:italic;font-weight:500;font-display:swap;src:url(fonts/Presevka-MediumItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
-@font-face{font-family:Presevka;font-style:italic;font-weight:500;font-display:swap;src:url(fonts/Presevka-MediumItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
 @font-face{font-family:Presevka;font-style:italic;font-weight:600;font-display:swap;src:url(fonts/Presevka-SemiBoldItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
-@font-face{font-family:Presevka;font-style:italic;font-weight:600;font-display:swap;src:url(fonts/Presevka-SemiBoldItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
 @font-face{font-family:Presevka;font-style:italic;font-weight:700;font-display:swap;src:url(fonts/Presevka-BoldItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
-@font-face{font-family:Presevka;font-style:italic;font-weight:700;font-display:swap;src:url(fonts/Presevka-BoldItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
 @font-face{font-family:Presevka;font-style:italic;font-weight:800;font-display:swap;src:url(fonts/Presevka-ExtraBoldItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
-@font-face{font-family:Presevka;font-style:italic;font-weight:800;font-display:swap;src:url(fonts/Presevka-ExtraBoldItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
 @font-face{font-family:Presevka;font-style:italic;font-weight:900;font-display:swap;src:url(fonts/Presevka-BlackItalic.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
-@font-face{font-family:Presevka;font-style:italic;font-weight:900;font-display:swap;src:url(fonts/Presevka-BlackItalic.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
 
 /* The weight showing draws all nine at once. Faces cut to its one line keep a
    page load from pulling nine Hangul subsets before anyone has asked. */
