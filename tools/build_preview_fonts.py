@@ -4,6 +4,7 @@
 # dependencies = [
 #   "fonttools[woff]>=4.63.0",
 #   "brotli>=1.1.0",
+#   "uharfbuzz>=0.56.0",
 # ]
 # ///
 
@@ -33,7 +34,11 @@ import argparse
 import sys
 from pathlib import Path
 
+import json
+
+import uharfbuzz as hb
 from fontTools.subset import main as pyftsubset
+from fontTools.ttLib import TTFont
 
 from font_utils import PRESEVKA_WEIGHTS
 
@@ -57,6 +62,45 @@ PARTS = {"latin": LATIN_RANGES, "hangul": HANGUL_RANGES}
 # every weight's Hangul before a reader has asked for any of it. It needs one
 # line, so it gets a face cut to that line's characters and nothing else.
 SPECIMEN = "float Fox.quick(h){ is_brown } // 다람쥐 헌 쳇바퀴에 타고파"
+
+# The glyph table on the page shows what a stylistic set actually changes,
+# which is a question a reader cannot answer by eye across ninety characters.
+# Iosevka's sets only ever touch the Latin side, so the table is Latin.
+TABLE = (
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "abcdefghijklmnopqrstuvwxyz"
+    "0123456789"
+    "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+)
+
+# Every stylistic set Iosevka ships, plus the slashed zero, which the page
+# offers as its own switch.
+FEATURES = [f"ss{n:02d}" for n in range(1, 21) if n != 19] + ["zero"]
+
+
+def changed_by(path: Path) -> dict[str, str]:
+    """Return, per feature, the characters whose glyph it swaps.
+
+    Asking the font is the only way to know. Shaping each character once plain
+    and once with the feature on and comparing the glyph it lands on is exact,
+    and it costs nothing at page load because the answer ships as data.
+    """
+    font = hb.Font(hb.Face(hb.Blob.from_file_path(str(path))))
+
+    def glyphs(text: str, feature: str | None) -> list[int]:
+        buf = hb.Buffer()
+        buf.add_str(text)
+        buf.guess_segment_properties()
+        hb.shape(font, buf, {feature: True} if feature else {})
+        return [info.codepoint for info in buf.glyph_infos]
+
+    plain = {ch: glyphs(ch, None) for ch in TABLE}
+    out = {}
+    for feature in FEATURES:
+        hit = "".join(ch for ch in TABLE if glyphs(ch, feature) != plain[ch])
+        if hit:
+            out[feature] = hit
+    return out
 
 
 def parse_args() -> argparse.Namespace:
@@ -133,6 +177,36 @@ def main() -> None:
             line.append(f"spec {size / 1024:5.1f} KB")
             print("  ".join(line))
     print(f"\n{args.output_dir}: {total / 1048576:.1f} MB")
+
+    regular = next(
+        c
+        for c in (
+            args.font_dir / "Presevka-Regular.ttf",
+            args.font_dir / "Presevka-Regular.woff2",
+        )
+        if c.is_file()
+    )
+    if regular.suffix == ".woff2":
+        # HarfBuzz does not read woff2; hand it the decompressed table.
+        plain = args.output_dir / "_regular.ttf"
+        tt = TTFont(regular)
+        tt.flavor = None
+        tt.save(plain)
+        tt.close()
+        regular = plain
+    table = {"characters": TABLE, "changes": changed_by(regular)}
+    if regular.name == "_regular.ttf":
+        regular.unlink()
+    # A script tag rather than a fetch: the grid is then built before first
+    # paint instead of appearing a moment later, and the page keeps working
+    # from a file:// checkout where fetch would be blocked.
+    target = args.output_dir.parent / "glyph-variants.js"
+    target.write_text(
+        "window.PRESEVKA_GLYPHS=" + json.dumps(table, ensure_ascii=False) + ";\n",
+        encoding="utf-8",
+    )
+    counts = ", ".join(f"{k} {len(v)}" for k, v in table["changes"].items())
+    print(f"{target}: {counts}")
 
 
 if __name__ == "__main__":

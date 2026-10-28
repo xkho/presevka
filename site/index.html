@@ -6,6 +6,7 @@
 <title>Presevka — 프리텐다드에 Iosevka를 합친 고정폭 글꼴</title>
 <meta name="description" content="한글 한 칸이 라틴 두 칸에 정확히 대응하는 코딩용 고정폭 글꼴. 아홉 굵기, Iosevka의 글자꼴 변형 그대로. 직접 쳐 보세요.">
 <link rel="icon" href="data:,">
+<script src="glyph-variants.js"></script>
 
 <!-- A specimen is set in a serif and shows its subject in the subject's own
      face; that division is older than the web and it is why the page reads as
@@ -58,19 +59,19 @@
    panels it sits on. */
 :root{
   --ink:#101414; --paper:#171c1c; --fg:#c7cccb; --quiet:#8d9392;
-  --rule:#272c2c; --signal:#75f4ff; --tint:rgba(117,244,255,.12);
+  --rule:#272c2c; --signal:#75f4ff;
   --sel:rgba(117,244,255,.22);
 }
 @media (prefers-color-scheme:light){
   :root:not([data-theme=dark]){
     --ink:#fcfcfc; --paper:#f2f4f4; --fg:#212525; --quiet:#646867;
-    --rule:#e0e4e3; --signal:#0078a3; --tint:rgba(0,120,163,.10);
+    --rule:#e0e4e3; --signal:#0078a3;
     --sel:rgba(0,120,163,.18);
   }
 }
 :root[data-theme=light]{
   --ink:#fcfcfc; --paper:#f2f4f4; --fg:#212525; --quiet:#646867;
-  --rule:#e0e4e3; --signal:#0078a3; --tint:rgba(0,120,163,.10);
+  --rule:#e0e4e3; --signal:#0078a3;
   --sel:rgba(0,120,163,.18);
 }
 
@@ -82,7 +83,7 @@ html{
 ::selection{background:var(--sel);color:var(--fg)}
 ::-webkit-scrollbar{width:11px;height:11px}
 ::-webkit-scrollbar-track{background:var(--ink)}
-::-webkit-scrollbar-thumb{background:var(--rule);border:3px solid var(--ink);border-radius:99px}
+::-webkit-scrollbar-thumb{background:var(--rule);border:3px solid var(--ink)}
 ::-webkit-scrollbar-thumb:hover{background:var(--quiet)}
 
 body{
@@ -92,11 +93,10 @@ body{
   font-synthesis:none;word-break:keep-all;
   -webkit-font-smoothing:antialiased;
 }
-.mono{font-family:Presevka,ui-monospace,SFMono-Regular,Menlo,monospace}
 
 a{color:var(--signal);text-decoration:none}
 a:hover{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
-:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:2px}
+:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
 
 .page{max-width:66rem;margin:0 auto;padding:0 32px}
 
@@ -117,21 +117,18 @@ a:hover{text-decoration:underline;text-underline-offset:3px;text-decoration-thic
 .lockup b{font-weight:400;display:block}
 .lockup .ko{color:var(--fg)}
 .lockup .la{color:var(--signal)}
-.claim{
-  margin:2.6rem 0 0;font-size:21px;line-height:1.5;max-width:30em;
-  color:var(--fg);font-weight:400;
-}
-.what{margin:.5rem 0 0;font-size:15px;color:var(--quiet)}
+.what{margin:2.6rem 0 0;font-size:17px;color:var(--quiet)}
 .cta{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:2rem}
+/* Squares with a drawn edge, lettered in the face they are offering. */
 .btn{
-  display:inline-block;padding:.6rem 1.4rem;border-radius:999px;
-  font-family:"Noto Serif KR",Georgia,serif;font-size:15px;font-weight:500;
-  border:1px solid var(--rule);color:var(--fg);
-  transition:border-color .16s ease,background-color .16s ease;
+  display:inline-block;padding:.72rem 1.8rem;
+  font-family:Presevka,monospace;font-size:17px;font-weight:400;
+  border:1px solid var(--fg);color:var(--fg);
+  transition:color .16s ease,border-color .16s ease,background-color .16s ease;
 }
-.btn:hover{border-color:var(--signal);text-decoration:none}
-.btn.now{background:var(--signal);border-color:var(--signal);color:var(--ink)}
-.btn.now:hover{opacity:.86}
+.btn:hover{border-color:var(--signal);color:var(--signal);text-decoration:none}
+.btn.now{border-color:var(--signal);color:var(--signal)}
+.btn.now:hover{background:var(--signal);color:var(--ink)}
 .plain{
   background:none;border:0;padding:.6rem .4rem;color:var(--quiet);cursor:pointer;
   font-family:inherit;font-size:13px;text-decoration:underline;text-underline-offset:3px;
@@ -152,13 +149,6 @@ a:hover{text-decoration:underline;text-underline-offset:3px;text-decoration-thic
 .showing > :last-child{margin-bottom:0}
 .gloss{margin:1.4rem 0 0;font-size:15px;color:var(--quiet);max-width:38em}
 
-/* ---------- grid proof ---------- */
-.tabled{
-  font-family:Presevka,monospace;font-size:17px;line-height:1.95;
-  white-space:pre;margin:0;overflow-x:auto;
-}
-.tabled .cell{background:var(--tint)}
-
 /* ---------- weights ---------- */
 .scroller{overflow-x:auto}
 .weights .name{position:sticky;left:0;background:var(--ink)}
@@ -172,25 +162,45 @@ a:hover{text-decoration:underline;text-underline-offset:3px;text-decoration-thic
   font-family:PresevkaSpec,Presevka,monospace;font-size:21px;white-space:nowrap;
 }
 
-/* ---------- variants ---------- */
-.variant{margin:0 0 2.1rem}
-.variant:last-child{margin-bottom:0}
-.variant .show{
-  font-family:Presevka,monospace;font-size:28px;line-height:1.5;
-  letter-spacing:.02em;margin:0 0 .55rem;min-height:1.5em;
+/* ---------- the glyph table ---------- */
+.rack{
+  display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1.3rem;
+  margin:0 0 .9rem;
 }
-.variant .cap{font-size:13px;color:var(--quiet);margin:0 0 .5rem}
+.tally{margin:0 0 0 auto;font-size:13px;color:var(--signal)}
+.tally:empty{display:none}
+
+/* One cell per character, small enough that the whole Latin side is one
+   glance. A cell the reader must scroll to is a cell they will not compare. */
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(2.35rem,1fr));
+  border-top:1px solid var(--rule);border-left:1px solid var(--rule);
+}
+.cellbox{
+  border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  font-family:Presevka,monospace;font-size:19px;line-height:1;
+  color:var(--fg);
+}
+/* The accent names what this set actually touches, which is the one thing a
+   reader cannot work out by looking at ninety characters. */
+.cellbox.on{color:var(--signal);border-color:var(--signal);position:relative;z-index:1}
+
+.liga-row{
+  margin:1.1rem 0 0;font-family:Presevka,monospace;font-size:21px;
+  color:var(--fg);
+}
+
 select{
-  background:var(--paper);color:var(--fg);border:1px solid var(--rule);
-  border-radius:6px;padding:.3rem .55rem;font-family:inherit;font-size:13px;
-  max-width:16rem;width:100%;
+  background:var(--ink);color:var(--fg);border:1px solid var(--rule);
+  padding:.32rem .5rem;font-family:inherit;font-size:13px;max-width:15rem;
 }
 .check{display:inline-flex;align-items:center;gap:.45rem;font-size:13px;color:var(--quiet);cursor:pointer}
 .check input{accent-color:var(--signal);margin:0}
 
 /* ---------- the box ---------- */
 #stage{
-  width:100%;border:1px solid var(--rule);border-radius:10px;
+  width:100%;border:1px solid var(--rule);
   background:var(--paper);color:var(--fg);caret-color:var(--signal);
   padding:1.3rem 1.5rem;margin:0;white-space:pre-wrap;overflow-wrap:break-word;
   outline:none;min-height:14rem;
@@ -221,14 +231,11 @@ footer a:hover{color:var(--signal)}
   .page{padding:0 20px}
   .hero{padding:3.5rem 0 3rem}
   .wordmark{margin-bottom:2rem}
-  .claim{font-size:17px;margin-top:2rem}
   .band{grid-template-columns:minmax(0,1fr);gap:1.1rem;padding:2.6rem 0}
   .margin p{display:inline;margin-left:.5rem}
   .margin h2{display:inline}
-  .tabled{font-size:13px;line-height:1.85}
   .weights .name{width:5.5rem;font-size:12px;padding-right:.6rem}
   .weights .line{font-size:15px}
-  .variant .show{font-size:21px}
   #stage{font-size:17px;padding:1.05rem 1.15rem}
 }
 @media (prefers-reduced-motion:reduce){
@@ -245,30 +252,13 @@ footer a:hover{color:var(--signal)}
     <div class="lockup" aria-label="한글 여덟 자와 라틴 열여섯 자가 같은 폭을 차지합니다">
       <b class="ko">가나다라마바사아</b><b class="la">ABCDEFGHIJKLMNOP</b>
     </div>
-    <p class="claim">한글 여덟 자와 라틴 열여섯 자가 같은 폭입니다.</p>
     <p class="what">프리텐다드에 Iosevka를 합친 고정폭 글꼴</p>
     <div class="cta">
-      <a class="btn now" href="https://github.com/xkho/presevka/releases/latest">내려받기</a>
-      <a class="btn" href="#try">직접 쳐 보기</a>
+      <a class="btn now" href="https://github.com/xkho/presevka/releases/latest">Download</a>
       <a class="btn" href="https://github.com/xkho/presevka">GitHub</a>
       <button class="plain" type="button" id="theme">밝게</button>
     </div>
   </div>
-
-  <section class="band">
-    <div class="margin">
-      <h2>칸</h2>
-      <p>한글 1 : 라틴 2</p>
-    </div>
-    <div class="showing">
-<pre class="tabled">|<span class="cell">이름      </span>|<span class="cell">타입    </span>|<span class="cell">기본값  </span>|
-|----------|--------|--------|
-|<span class="cell">strict    </span>|<span class="cell">boolean </span>|<span class="cell">false   </span>|
-|<span class="cell">페이지크기</span>|<span class="cell">integer </span>|<span class="cell">50      </span>|
-|<span class="cell">재시도    </span>|<span class="cell">integer </span>|<span class="cell">3       </span>|</pre>
-      <p class="gloss">한국어 주석을 달아도 표의 세로줄과 들여쓰기가 어긋나지 않습니다.</p>
-    </div>
-  </section>
 
   <section class="band">
     <div class="margin">
@@ -277,32 +267,26 @@ footer a:hover{color:var(--signal)}
     </div>
     <div class="showing">
       <div class="scroller"><table class="weights"><tbody id="weights"></tbody></table></div>
-      <p class="gloss">굵기마다 한글 획을 라틴에 맞춰 그렸습니다. 한 음절에 자모가 여럿 들어가
-        같은 굵기면 더 검게 보이므로, 한글은 라틴보다 조금 얇게 둡니다.</p>
+      <p class="gloss">굵기마다 한글 획을 라틴에 맞춰 그렸습니다.</p>
     </div>
   </section>
 
   <section class="band">
     <div class="margin">
       <h2>글자꼴</h2>
-      <p>stylistic set 19종<br>character variant 99종</p>
+      <p>stylistic set 19종</p>
     </div>
     <div class="showing">
-      <div class="variant">
-        <p class="show" id="ssShow">agly 0123 @&amp;</p>
-        <p class="cap">Iosevka의 스타일 세트가 폰트 안에 들어 있습니다. 에디터 설정만으로 켜집니다.</p>
+      <div class="rack">
         <select id="ss" aria-label="스타일 세트"></select>
+        <label class="check"><input type="checkbox" id="zero"> 0에 사선</label>
+        <label class="check"><input type="checkbox" id="liga" checked> 리거처</label>
+        <p class="tally" id="tally" role="status"></p>
       </div>
-      <div class="variant">
-        <p class="show" id="ligShow">-&gt; =&gt; != &lt;= &gt;= ===</p>
-        <p class="cap">연산자를 하나로 이어 그립니다.</p>
-        <label class="check"><input type="checkbox" id="lig" checked> 리거처</label>
-      </div>
-      <div class="variant">
-        <p class="show" id="itShow">italic 한글은 곧게</p>
-        <p class="cap">이탤릭에서도 한글은 기울이지 않습니다.</p>
-        <label class="check"><input type="checkbox" id="it"> 기울이기</label>
-      </div>
+      <div class="grid" id="grid" aria-label="글자 보임판"></div>
+      <p class="gloss">라틴은 Iosevka를 손대지 않고 씁니다. 스타일 세트는 폰트 안에
+        들어 있어 에디터 설정만으로 켜지고, 바뀌는 글자만 강조색으로 표시했습니다.</p>
+      <div class="liga-row" id="ligaRow">-&gt; =&gt; != &lt;= &gt;= === !== |&gt; ++ :: /* */</div>
     </div>
   </section>
 
@@ -334,12 +318,12 @@ double average(const std::vector&lt;double&gt;&amp; readings) {
           <input type="range" id="weight" min="100" max="900" step="100" value="400"><output for="weight">400</output></label>
         <label class="dial"><span>줄 간격</span>
           <input type="range" id="lh" min="1" max="2.4" step="0.05" value="1.6"><output for="lh">1.60</output></label>
-        <label class="dial"><span>글자꼴</span><select id="ss2" aria-label="시험 상자 스타일 세트"></select></label>
+        <label class="dial"><span>글자꼴</span><select id="pSs" aria-label="시험 상자 스타일 세트"></select></label>
       </div>
       <div class="flags">
-        <label class="check"><input type="checkbox" id="liga" checked> 리거처</label>
-        <label class="check"><input type="checkbox" id="zero"> 0에 사선</label>
-        <label class="check"><input type="checkbox" id="italic"> 이탤릭</label>
+        <label class="check"><input type="checkbox" id="pLiga" checked> 리거처</label>
+        <label class="check"><input type="checkbox" id="pZero"> 0에 사선</label>
+        <label class="check"><input type="checkbox" id="pItalic"> 이탤릭</label>
       </div>
     </div>
   </section>
@@ -381,43 +365,101 @@ double average(const std::vector&lt;double&gt;&amp; readings) {
       o.value = s[0]; o.textContent = s[1]; sel.appendChild(o);
     });
   }
-  var ssCard = document.getElementById('ss');
-  var ssPlay = document.getElementById('ss2');
-  fill(ssCard); fill(ssPlay);
-
-  // Each showing demonstrates one thing and answers only its own control.
-  var ssShow = document.getElementById('ssShow');
-  ssCard.addEventListener('change', function () {
-    ssShow.style.fontFeatureSettings =
-      ssCard.value ? '"' + ssCard.value + '" 1' : 'normal';
-  });
-  var lig = document.getElementById('lig'), ligShow = document.getElementById('ligShow');
-  lig.addEventListener('change', function () {
-    ligShow.style.fontFeatureSettings = lig.checked ? 'normal' : '"calt" 0, "liga" 0';
-  });
-  var it = document.getElementById('it'), itShow = document.getElementById('itShow');
-  it.addEventListener('change', function () {
-    itShow.style.fontStyle = it.checked ? 'italic' : 'normal';
-  });
-
-  var stage = document.getElementById('stage');
-  function features() {
-    var on = [];
-    if (!document.getElementById('liga').checked) on.push('"calt" 0, "liga" 0');
-    if (document.getElementById('zero').checked) on.push('"zero" 1');
-    if (ssPlay.value) on.push('"' + ssPlay.value + '" 1');
-    stage.style.fontFeatureSettings = on.length ? on.join(', ') : 'normal';
+  function featureString(parts) {
+    return parts.length ? parts.join(', ') : 'normal';
   }
-  ['liga', 'zero'].forEach(function (id) {
-    document.getElementById(id).addEventListener('change', features);
-  });
-  ssPlay.addEventListener('change', features);
-  features();
 
-  var italic = document.getElementById('italic');
-  italic.addEventListener('change', function () {
-    stage.style.fontStyle = italic.checked ? 'italic' : 'normal';
+  /* ---------- the glyph table ---------- */
+  var ss = document.getElementById('ss');
+  var zero = document.getElementById('zero');
+  var liga = document.getElementById('liga');
+  var grid = document.getElementById('grid');
+  var tally = document.getElementById('tally');
+  var ligaRow = document.getElementById('ligaRow');
+  fill(ss);
+
+  var cells = [];
+  var changes = {};
+  var pSsPending = '';
+
+  function paint() {
+    var parts = [];
+    if (ss.value) parts.push('"' + ss.value + '" 1');
+    if (zero.checked) parts.push('"zero" 1');
+    grid.style.fontFeatureSettings = featureString(parts);
+
+    // Which characters this setting actually swaps, read from the font at
+    // build time. Nothing in the browser can answer that question.
+    var hit = {};
+    [ss.value, zero.checked ? 'zero' : ''].forEach(function (key) {
+      var list = key && changes[key];
+      if (list) for (var i = 0; i < list.length; i += 1) hit[list[i]] = true;
+    });
+    var n = 0;
+    cells.forEach(function (cell) {
+      var on = !!hit[cell.textContent];
+      cell.classList.toggle('on', on);
+      if (on) n += 1;
+    });
+    tally.textContent = n ? n + '자가 바뀝니다' : '';
+  }
+
+  var data = window.PRESEVKA_GLYPHS;
+  if (data) {
+    changes = data.changes || {};
+    var chars = data.characters || '';
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < chars.length; i += 1) {
+      var cell = document.createElement('div');
+      cell.className = 'cellbox';
+      cell.textContent = chars[i];
+      frag.appendChild(cell);
+      cells.push(cell);
+    }
+    grid.appendChild(frag);
+    // A set named in the address is a set someone sent you.
+    var asked = (location.hash || '').match(/ss\d\d/);
+    if (asked && changes[asked[0]]) { ss.value = asked[0]; pSsPending = asked[0]; }
+    paint();
+  } else {
+    grid.remove();
+  }
+
+  function ligatures() {
+    ligaRow.style.fontFeatureSettings =
+      liga.checked ? 'normal' : '"calt" 0, "liga" 0, "dlig" 0';
+  }
+  ss.addEventListener('change', paint);
+  zero.addEventListener('change', paint);
+  liga.addEventListener('change', ligatures);
+  // Read the controls once at start too. A browser restores a checkbox across
+  // a reload, and a handler that only listens for changes would then show the
+  // opposite of what the box says.
+  ligatures();
+
+  /* ---------- the box ---------- */
+  var stage = document.getElementById('stage');
+  var pSs = document.getElementById('pSs');
+  var pLiga = document.getElementById('pLiga');
+  var pZero = document.getElementById('pZero');
+  var pItalic = document.getElementById('pItalic');
+  fill(pSs);
+  if (pSsPending) pSs.value = pSsPending;
+
+  function dress() {
+    var parts = [];
+    if (pSs.value) parts.push('"' + pSs.value + '" 1');
+    if (pZero.checked) parts.push('"zero" 1');
+    if (!pLiga.checked) parts.push('"calt" 0, "liga" 0, "dlig" 0');
+    stage.style.fontFeatureSettings = featureString(parts);
+  }
+  [pSs, pZero, pLiga].forEach(function (el) {
+    el.addEventListener('change', dress);
   });
+  pItalic.addEventListener('change', function () {
+    stage.style.fontStyle = pItalic.checked ? 'italic' : 'normal';
+  });
+  dress();
 
   function dial(id, apply, fmt) {
     var el = document.getElementById(id);
@@ -432,6 +474,7 @@ double average(const std::vector&lt;double&gt;&amp; readings) {
   dial('lh', function (v) { stage.style.lineHeight = v; },
        function (v) { return Number(v).toFixed(2); });
 
+  /* ---------- the weight showing ---------- */
   var NAMES = [[100, 'Thin'], [200, 'ExtraLight'], [300, 'Light'],
                [400, 'Regular'], [500, 'Medium'], [600, 'SemiBold'],
                [700, 'Bold'], [800, 'ExtraBold'], [900, 'Black']];
@@ -446,23 +489,22 @@ double average(const std::vector&lt;double&gt;&amp; readings) {
     tr.appendChild(name); tr.appendChild(line); body.appendChild(tr);
   });
 
-  // Remembered per reader; the page renders correctly without it.
+  /* ---------- theme, remembered per reader ---------- */
   var root = document.documentElement, toggle = document.getElementById('theme');
-  function dark() {
+  function isDark() {
     var set = root.getAttribute('data-theme');
     if (set) return set === 'dark';
     return !window.matchMedia('(prefers-color-scheme: light)').matches;
   }
-  function label() { toggle.textContent = dark() ? '밝게' : '어둡게'; }
+  function label() { toggle.textContent = isDark() ? '밝게' : '어둡게'; }
   try {
     var saved = localStorage.getItem('presevka-theme');
     if (saved) root.setAttribute('data-theme', saved);
   } catch (e) {}
   label();
   toggle.addEventListener('click', function () {
-    var next = dark() ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    try { localStorage.setItem('presevka-theme', next); } catch (e) {}
+    root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
+    try { localStorage.setItem('presevka-theme', root.getAttribute('data-theme')); } catch (e) {}
     label();
   });
 })();

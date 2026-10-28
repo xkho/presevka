@@ -50,7 +50,7 @@ jobs:
 
       - name: Cut the faces down for the page
         run: |
-          uv run --with 'fonttools[woff]>=4.63.0' --with brotli \
+          uv run --with 'fonttools[woff]>=4.63.0' --with brotli --with 'uharfbuzz>=0.56.0' \
             python tools/build_preview_fonts.py \
             --font-dir build/webfonts --output-dir site/fonts
           du -sh site/fonts
