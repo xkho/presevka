@@ -21,3 +21,6 @@ __pycache__/
 
 .serena
 .serena/*
+
+# 미리보기 페이지의 웹폰트. 릴리스에서 만들어 내므로 추적하지 않습니다.
+site/fonts/

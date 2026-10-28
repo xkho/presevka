@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Presevka — Pretendard × Iosevka</title>
+<meta name="description" content="Iosevka의 라틴에 Pretendard의 한글을 얹은 고정폭 글꼴. 직접 쳐 보세요.">
+<link rel="icon" href="data:,">
+
+<style>
+/* Nine weights, each split so a browser pulls the Hangul of a weight only
+   when it has Hangul of that weight to draw. */
+@font-face{font-family:Presevka;font-weight:100;font-display:swap;src:url(fonts/Presevka-Thin.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:100;font-display:swap;src:url(fonts/Presevka-Thin.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:200;font-display:swap;src:url(fonts/Presevka-ExtraLight.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:200;font-display:swap;src:url(fonts/Presevka-ExtraLight.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:300;font-display:swap;src:url(fonts/Presevka-Light.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:300;font-display:swap;src:url(fonts/Presevka-Light.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:400;font-display:swap;src:url(fonts/Presevka-Regular.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:400;font-display:swap;src:url(fonts/Presevka-Regular.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:500;font-display:swap;src:url(fonts/Presevka-Medium.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:500;font-display:swap;src:url(fonts/Presevka-Medium.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:600;font-display:swap;src:url(fonts/Presevka-SemiBold.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:600;font-display:swap;src:url(fonts/Presevka-SemiBold.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:700;font-display:swap;src:url(fonts/Presevka-Bold.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:700;font-display:swap;src:url(fonts/Presevka-Bold.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:800;font-display:swap;src:url(fonts/Presevka-ExtraBold.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:800;font-display:swap;src:url(fonts/Presevka-ExtraBold.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+@font-face{font-family:Presevka;font-weight:900;font-display:swap;src:url(fonts/Presevka-Black.latin.woff2)format("woff2");unicode-range:U+0000-2FFF,U+A000-ABFF,U+D800-FFFF}
+@font-face{font-family:Presevka;font-weight:900;font-display:swap;src:url(fonts/Presevka-Black.hangul.woff2)format("woff2");unicode-range:U+1100-11FF,U+3000-318F,U+A960-A97F,U+AC00-D7A3,U+FF00-FFEF}
+
+
+/* The nine-weight table draws every weight at once. Pointing it at faces
+   cut to that one line keeps a page load from pulling nine Hangul subsets
+   before a reader has asked to see any of them. */
+@font-face{font-family:PresevkaSpec;font-weight:100;font-display:swap;src:url(fonts/Presevka-Thin.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:200;font-display:swap;src:url(fonts/Presevka-ExtraLight.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:300;font-display:swap;src:url(fonts/Presevka-Light.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:400;font-display:swap;src:url(fonts/Presevka-Regular.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:500;font-display:swap;src:url(fonts/Presevka-Medium.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:600;font-display:swap;src:url(fonts/Presevka-SemiBold.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:700;font-display:swap;src:url(fonts/Presevka-Bold.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:800;font-display:swap;src:url(fonts/Presevka-ExtraBold.spec.woff2)format("woff2")}
+@font-face{font-family:PresevkaSpec;font-weight:900;font-display:swap;src:url(fonts/Presevka-Black.spec.woff2)format("woff2")}
+:root{
+  --bg:#ffffff; --fg:#1f2328; --muted:#59636e; --line:#d1d9e0;
+  --field:#f6f8fa; --accent:#0969da; --code-bg:#f6f8fa;
+}
+:root:not([data-theme=light]) @media (prefers-color-scheme:dark){}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme=light]){
+    --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#3d444d;
+    --field:#151b23; --accent:#4493f8; --code-bg:#151b23;
+  }
+}
+:root[data-theme=dark]{
+  --bg:#0d1117; --fg:#e6edf3; --muted:#9198a1; --line:#3d444d;
+  --field:#151b23; --accent:#4493f8; --code-bg:#151b23;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:Presevka,ui-monospace,SFMono-Regular,Menlo,monospace;
+  line-height:1.6;
+}
+.wrap{max-width:60rem;margin:0 auto;padding:0 16px}
+
+header{padding:3rem 0 1.5rem}
+h1{font-size:2.25rem;font-weight:700;margin:0 0 .4rem;letter-spacing:-.01em}
+.lede{margin:0;color:var(--muted);font-size:1rem}
+.lede b{color:var(--fg);font-weight:500}
+
+.actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.4rem}
+.btn{
+  display:inline-block;padding:.5rem 1rem;border-radius:6px;
+  border:1px solid var(--line);color:var(--fg);text-decoration:none;
+  font-size:.9rem;font-weight:500;background:var(--field);
+}
+.btn.primary{background:var(--accent);border-color:transparent;color:#fff}
+.btn:hover{border-color:var(--accent)}
+
+h2{font-size:1.05rem;font-weight:600;margin:2.5rem 0 .75rem}
+h2 small{font-weight:400;color:var(--muted);font-size:.85rem;margin-left:.5rem}
+
+/* The thing the page exists for. */
+#stage{
+  width:100%;border:1px solid var(--line);border-radius:8px;
+  background:var(--code-bg);color:var(--fg);
+  padding:1.25rem 1.4rem;margin:0;
+  white-space:pre-wrap;overflow-wrap:anywhere;
+  outline:none;min-height:14rem;
+  font-family:inherit;
+  font-size:19px;font-weight:400;line-height:1.6;
+  font-feature-settings:normal;
+}
+#stage:focus{border-color:var(--accent)}
+
+.controls{
+  display:grid;gap:.9rem 1.5rem;margin:1rem 0 0;
+  grid-template-columns:repeat(auto-fit,minmax(13rem,1fr));
+}
+.ctl{display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:var(--muted)}
+.ctl label{flex:0 0 auto;min-width:3.6rem}
+.ctl input[type=range]{flex:1;min-width:0;accent-color:var(--accent)}
+.ctl output{flex:0 0 3.4rem;text-align:right;color:var(--fg);font-variant-numeric:tabular-nums}
+.ctl select{
+  flex:1;min-width:0;background:var(--field);color:var(--fg);
+  border:1px solid var(--line);border-radius:6px;padding:.3rem .4rem;
+  font-family:inherit;font-size:.8rem;
+}
+.toggles{display:flex;flex-wrap:wrap;gap:1rem;margin-top:.9rem;font-size:.8rem;color:var(--muted)}
+.toggles label{display:flex;align-items:center;gap:.4rem;cursor:pointer}
+.toggles input{accent-color:var(--accent)}
+
+table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:.5rem}
+th,td{text-align:left;padding:.45rem .6rem;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:500}
+td.w{color:var(--muted);white-space:nowrap;width:1%}
+td.s{font-family:PresevkaSpec,Presevka,monospace;font-size:1.15rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+footer{margin:4rem 0 3rem;padding-top:1.25rem;border-top:1px solid var(--line);
+  font-size:.8rem;color:var(--muted)}
+footer a{color:var(--accent)}
+footer p{margin:.35rem 0}
+
+@media (max-width:40rem){
+  header{padding:2rem 0 1rem}
+  h1{font-size:1.75rem}
+  #stage{font-size:16px;padding:1rem}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Presevka</h1>
+  <p class="lede"><b>Iosevka</b>의 라틴에 <b>Pretendard</b>의 한글을 얹은 고정폭 글꼴.
+    한글 한 칸이 라틴 두 칸에 정확히 대응하고, 아홉 굵기 모두에서 두 문자가 같은 굵기로 읽힙니다.</p>
+  <div class="actions">
+    <a class="btn primary" href="https://github.com/xkho/presevka/releases/latest">내려받기</a>
+    <a class="btn" href="https://github.com/xkho/presevka">GitHub</a>
+    <a class="btn" href="#" id="theme">테마 전환</a>
+  </div>
+</header>
+
+<h2>직접 쳐 보세요 <small>아래 상자는 편집할 수 있습니다</small></h2>
+
+<div id="stage" contenteditable="true" spellcheck="false">#include &lt;vector&gt;
+
+// 읽은 값들의 평균. 빈 배열이면 0을 돌려준다
+double average(const std::vector&lt;double&gt;&amp; readings) {
+  double sum = 0.0;
+  int count = 0;
+
+  // 나중에 거를 조건을 넣을 수 있게 size() 대신 직접 센다
+  for (double c : readings) {
+    sum += c;
+    ++count;
+  }
+
+  return count &gt; 0 ? sum / count : 0.0;  // 0으로 나누지 않도록 막는다
+}
+
+가나다라 ABCDEFGH  →  한글 두 글자가 라틴 네 글자
+마바사아 IJKLMNOP  →  표가 어긋나지 않습니다
+0123 4567 89AB CDEF
+-&gt; =&gt; != &lt;= &gt;= === !== |&gt; ++ -- :: /* */</div>
+
+<div class="controls">
+  <div class="ctl"><label for="size">크기</label>
+    <input type="range" id="size" min="11" max="40" value="19"><output for="size">19px</output></div>
+  <div class="ctl"><label for="weight">굵기</label>
+    <input type="range" id="weight" min="100" max="900" step="100" value="400"><output for="weight">400</output></div>
+  <div class="ctl"><label for="lh">줄 간격</label>
+    <input type="range" id="lh" min="1" max="2.4" step="0.05" value="1.6"><output for="lh">1.60</output></div>
+  <div class="ctl"><label for="ss">글자꼴</label>
+    <select id="ss"></select></div>
+</div>
+
+<div class="toggles">
+  <label><input type="checkbox" id="liga" checked> 리거처</label>
+  <label><input type="checkbox" id="zero"> 0에 사선</label>
+  <label><input type="checkbox" id="italic"> 이탤릭 <span id="italicNote"></span></label>
+</div>
+
+<h2>아홉 굵기 <small>Thin 100부터 Black 900까지</small></h2>
+<table id="weights"></table>
+
+<footer>
+  <p>글꼴과 그 수정물은 <a href="https://github.com/xkho/presevka/blob/main/OFL.txt">SIL Open Font License 1.1</a>,
+    빌더는 <a href="https://github.com/xkho/presevka/blob/main/LICENSE-CODE">MIT</a>입니다. 상업적 이용을 포함해 자유롭게 쓰실 수 있습니다.</p>
+  <p>Presevka는 <a href="https://github.com/be5invis/Iosevka">Iosevka</a>나
+    <a href="https://github.com/orioncactus/pretendard">Pretendard</a>의 공식 배포판이 아닌 독립적인 글꼴입니다.
+    한글 글리프가 포함된 Iosevka 계열을 찾는다면 <a href="https://github.com/be5invis/Sarasa-Gothic">Sarasa Gothic</a>도 보세요.</p>
+  <p>이 페이지의 글꼴은 미리보기용으로 힌팅을 덜어낸 판본입니다. 설치본은 내려받기에서 받으세요.</p>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  var stage = document.getElementById('stage');
+
+  // Iosevka ships these inside the font; the point of the page is that they
+  // can be switched on without rebuilding anything.
+  var SETS = [
+    ['', '기본 (Iosevka)'],
+    ['ss01', 'ss01 Andale Mono'], ['ss02', 'ss02 Anonymous Pro'],
+    ['ss03', 'ss03 Consolas'], ['ss04', 'ss04 Menlo'],
+    ['ss05', 'ss05 Fira Mono'], ['ss06', 'ss06 Liberation Mono'],
+    ['ss07', 'ss07 Monaco'], ['ss08', 'ss08 Pragmata Pro'],
+    ['ss09', 'ss09 Source Code Pro'], ['ss10', 'ss10 Envy Code R'],
+    ['ss11', 'ss11 X Windows Fixed'], ['ss12', 'ss12 Ubuntu Mono'],
+    ['ss13', 'ss13 Lucida'], ['ss14', 'ss14 JetBrains Mono'],
+    ['ss15', 'ss15 IBM Plex Mono'], ['ss16', 'ss16 PT Mono'],
+    ['ss17', 'ss17 Recursive'], ['ss18', 'ss18 Input Mono'],
+    ['ss20', 'ss20 Curly']
+  ];
+  var sel = document.getElementById('ss');
+  SETS.forEach(function (s) {
+    var o = document.createElement('option');
+    o.value = s[0]; o.textContent = s[1]; sel.appendChild(o);
+  });
+
+  function features() {
+    var on = [];
+    if (!document.getElementById('liga').checked) on.push('"calt" 0, "liga" 0');
+    if (document.getElementById('zero').checked) on.push('"zero" 1');
+    if (sel.value) on.push('"' + sel.value + '" 1');
+    stage.style.fontFeatureSettings = on.length ? on.join(', ') : 'normal';
+  }
+
+  function bind(id, apply, fmt) {
+    var el = document.getElementById(id);
+    var out = el.parentNode.querySelector('output');
+    function run() { apply(el.value); if (out) out.textContent = fmt(el.value); }
+    el.addEventListener('input', run); run();
+  }
+  bind('size', function (v) { stage.style.fontSize = v + 'px'; },
+       function (v) { return v + 'px'; });
+  bind('weight', function (v) { stage.style.fontWeight = v; },
+       function (v) { return v; });
+  bind('lh', function (v) { stage.style.lineHeight = v; },
+       function (v) { return Number(v).toFixed(2); });
+
+  ['liga', 'zero'].forEach(function (id) {
+    document.getElementById(id).addEventListener('change', features);
+  });
+  sel.addEventListener('change', features);
+  features();
+
+  // The italic is Latin only: the Hangul stays upright, on purpose.
+  var italic = document.getElementById('italic');
+  italic.addEventListener('change', function () {
+    stage.style.fontStyle = italic.checked ? 'italic' : 'normal';
+    document.getElementById('italicNote').textContent =
+      italic.checked ? '(한글은 기울지 않습니다)' : '';
+  });
+
+  var NAMES = [[100, 'Thin'], [200, 'ExtraLight'], [300, 'Light'],
+               [400, 'Regular'], [500, 'Medium'], [600, 'SemiBold'],
+               [700, 'Bold'], [800, 'ExtraBold'], [900, 'Black']];
+  var table = document.getElementById('weights');
+  table.innerHTML = '<tr><th>굵기</th><th>견본</th></tr>';
+  NAMES.forEach(function (w) {
+    var tr = document.createElement('tr');
+    var td = document.createElement('td');
+    td.className = 'w'; td.textContent = w[1] + ' ' + w[0];
+    var s = document.createElement('td');
+    s.className = 's'; s.style.fontWeight = w[0];
+    s.textContent = 'float Fox.quick(h){ is_brown } // 다람쥐 헌 쳇바퀴에 타고파';
+    tr.appendChild(td); tr.appendChild(s); table.appendChild(tr);
+  });
+
+  // Remembered per reader, and the page renders correctly without it.
+  var root = document.documentElement;
+  try {
+    var saved = localStorage.getItem('presevka-theme');
+    if (saved) root.setAttribute('data-theme', saved);
+  } catch (e) {}
+  document.getElementById('theme').addEventListener('click', function (e) {
+    e.preventDefault();
+    var dark = root.getAttribute('data-theme') === 'dark' ||
+      (!root.getAttribute('data-theme') &&
+       window.matchMedia('(prefers-color-scheme: dark)').matches);
+    var next = dark ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('presevka-theme', next); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>
