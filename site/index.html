@@ -61,18 +61,21 @@
   --ink:#101414; --paper:#171c1c; --fg:#c7cccb; --quiet:#8d9392;
   --rule:#272c2c; --signal:#75f4ff;
   --sel:rgba(117,244,255,.22);
+  --keep:rgba(199,204,203,.7); --drop:rgba(141,147,146,.62);
 }
 @media (prefers-color-scheme:light){
   :root:not([data-theme=dark]){
     --ink:#fcfcfc; --paper:#f2f4f4; --fg:#212525; --quiet:#646867;
     --rule:#e0e4e3; --signal:#0078a3;
     --sel:rgba(0,120,163,.18);
+    --keep:rgba(33,37,37,.72); --drop:rgba(100,104,103,.71);
   }
 }
 :root[data-theme=light]{
   --ink:#fcfcfc; --paper:#f2f4f4; --fg:#212525; --quiet:#646867;
   --rule:#e0e4e3; --signal:#0078a3;
   --sel:rgba(0,120,163,.18);
+  --keep:rgba(33,37,37,.72); --drop:rgba(100,104,103,.71);
 }
 
 *{box-sizing:border-box}
@@ -106,17 +109,27 @@ a:hover{text-decoration:underline;text-underline-offset:3px;text-decoration-thic
   font-family:Presevka,monospace;font-weight:400;font-size:17px;
   letter-spacing:.26em;color:var(--quiet);margin:0 0 3rem;
 }
-/* Two lines that end on the same pixel. Rules drawn through the letters would
-   say it louder and wreck the type doing it; on a specimen that trade is never
-   worth taking, and the flush right edge already carries the claim. */
-.lockup{
-  display:inline-block;font-family:Presevka,monospace;font-weight:400;
-  font-size:clamp(2rem,7.4vw,5.25rem);line-height:1.34;letter-spacing:0;
-  white-space:nowrap;
+/* The name, and where it came from. The two parents sit behind it at either
+   edge with the syllables that survive into the name held brighter than the
+   ones that do not, so the derivation is read rather than explained. Set in
+   the font itself, which is also the only specimen a wordmark needs. */
+.deriv{
+  display:flex;flex-direction:column;font-family:Presevka,monospace;
+  font-weight:400;line-height:1.1;white-space:nowrap;
 }
-.lockup b{font-weight:400;display:block}
-.lockup .ko{color:var(--fg)}
-.lockup .la{color:var(--signal)}
+.src{margin:0;font-size:clamp(1.6rem,5.6vw,3.6rem)}
+.from{align-self:flex-start}
+.into{align-self:flex-end}
+.name{
+  margin:-.12em 0;align-self:center;color:var(--fg);
+  font-size:clamp(2.4rem,8.8vw,5.6rem);
+}
+/* Three steps, not two: the name solid, the surviving syllables held back,
+   the dropped ones further still. Faded, but never below 3:1 -- the bar large
+   type answers to -- because a parent's name that vanishes takes half the
+   composition with it. */
+.keep{color:var(--keep)}
+.drop{color:var(--drop)}
 .what{margin:2.6rem 0 0;font-size:17px;color:var(--quiet)}
 .cta{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:2rem}
 /* Squares with a drawn edge, lettered in the face they are offering. */
@@ -126,9 +139,9 @@ a:hover{text-decoration:underline;text-underline-offset:3px;text-decoration-thic
   border:1px solid var(--fg);color:var(--fg);
   transition:color .16s ease,border-color .16s ease,background-color .16s ease;
 }
-.btn:hover{border-color:var(--signal);color:var(--signal);text-decoration:none}
-.btn.now{border-color:var(--signal);color:var(--signal)}
-.btn.now:hover{background:var(--signal);color:var(--ink)}
+@media (hover:hover){
+  .btn:hover{background:var(--fg);color:var(--ink);text-decoration:none}
+}
 .plain{
   background:none;border:0;padding:.6rem .4rem;color:var(--quiet);cursor:pointer;
   font-family:inherit;font-size:13px;text-decoration:underline;text-underline-offset:3px;
@@ -183,11 +196,16 @@ a:hover{text-decoration:underline;text-underline-offset:3px;text-decoration-thic
   color:var(--fg);
 }
 /* The accent names what this set actually touches, which is the one thing a
-   reader cannot work out by looking at ninety characters. */
-.cellbox.on{color:var(--signal);border-color:var(--signal);position:relative;z-index:1}
+   reader cannot work out by looking at ninety characters. The grid keeps its
+   own edges: a cell that moved its border would shift the whole rank. */
+.cellbox.on{color:var(--signal)}
+@media (hover:hover){
+  .cellbox:hover{background:var(--fg);color:var(--ink)}
+  .cellbox.on:hover{background:var(--signal);color:var(--ink)}
+}
 
 .liga-row{
-  margin:1.1rem 0 0;font-family:Presevka,monospace;font-size:21px;
+  margin:.85rem 0 0;font-family:Presevka,monospace;font-size:21px;
   color:var(--fg);
 }
 
@@ -249,12 +267,14 @@ footer a:hover{color:var(--signal)}
 
   <div class="hero">
     <p class="wordmark">PRESEVKA</p>
-    <div class="lockup" aria-label="한글 여덟 자와 라틴 열여섯 자가 같은 폭을 차지합니다">
-      <b class="ko">가나다라마바사아</b><b class="la">ABCDEFGHIJKLMNOP</b>
+    <div class="deriv" aria-label="프리텐다드와 Iosevka에서 Presevka">
+      <p class="src from"><span class="keep">프리</span><span class="drop">텐다드</span></p>
+      <p class="name">Presevka</p>
+      <p class="src into"><span class="drop">Io</span><span class="keep">sevka</span></p>
     </div>
     <p class="what">프리텐다드에 Iosevka를 합친 고정폭 글꼴</p>
     <div class="cta">
-      <a class="btn now" href="https://github.com/xkho/presevka/releases/latest">Download</a>
+      <a class="btn" href="https://github.com/xkho/presevka/releases/latest">Download</a>
       <a class="btn" href="https://github.com/xkho/presevka">GitHub</a>
       <button class="plain" type="button" id="theme">밝게</button>
     </div>
@@ -280,13 +300,11 @@ footer a:hover{color:var(--signal)}
       <div class="rack">
         <select id="ss" aria-label="스타일 세트"></select>
         <label class="check"><input type="checkbox" id="zero"> 0에 사선</label>
-        <label class="check"><input type="checkbox" id="liga" checked> 리거처</label>
         <p class="tally" id="tally" role="status"></p>
       </div>
       <div class="grid" id="grid" aria-label="글자 보임판"></div>
       <p class="gloss">라틴은 Iosevka를 손대지 않고 씁니다. 스타일 세트는 폰트 안에
         들어 있어 에디터 설정만으로 켜지고, 바뀌는 글자만 강조색으로 표시했습니다.</p>
-      <div class="liga-row" id="ligaRow">-&gt; =&gt; != &lt;= &gt;= === !== |&gt; ++ :: /* */</div>
     </div>
   </section>
 
@@ -311,6 +329,7 @@ double average(const std::vector&lt;double&gt;&amp; readings) {
 
   return count &gt; 0 ? sum / count : 0.0;  // 0으로 나누지 않도록 막는다
 }</div>
+      <div class="liga-row" id="ligaRow">-&gt; =&gt; != &lt;= &gt;= === !== |&gt; ++ :: /* */</div>
       <div class="dials">
         <label class="dial"><span>크기</span>
           <input type="range" id="size" min="11" max="40" value="19"><output for="size">19px</output></label>
@@ -372,10 +391,8 @@ double average(const std::vector&lt;double&gt;&amp; readings) {
   /* ---------- the glyph table ---------- */
   var ss = document.getElementById('ss');
   var zero = document.getElementById('zero');
-  var liga = document.getElementById('liga');
   var grid = document.getElementById('grid');
   var tally = document.getElementById('tally');
-  var ligaRow = document.getElementById('ligaRow');
   fill(ss);
 
   var cells = [];
@@ -425,17 +442,8 @@ double average(const std::vector&lt;double&gt;&amp; readings) {
     grid.remove();
   }
 
-  function ligatures() {
-    ligaRow.style.fontFeatureSettings =
-      liga.checked ? 'normal' : '"calt" 0, "liga" 0, "dlig" 0';
-  }
   ss.addEventListener('change', paint);
   zero.addEventListener('change', paint);
-  liga.addEventListener('change', ligatures);
-  // Read the controls once at start too. A browser restores a checkbox across
-  // a reload, and a handler that only listens for changes would then show the
-  // opposite of what the box says.
-  ligatures();
 
   /* ---------- the box ---------- */
   var stage = document.getElementById('stage');
@@ -443,6 +451,7 @@ double average(const std::vector&lt;double&gt;&amp; readings) {
   var pLiga = document.getElementById('pLiga');
   var pZero = document.getElementById('pZero');
   var pItalic = document.getElementById('pItalic');
+  var ligaRow = document.getElementById('ligaRow');
   fill(pSs);
   if (pSsPending) pSs.value = pSsPending;
 
@@ -452,6 +461,9 @@ double average(const std::vector&lt;double&gt;&amp; readings) {
     if (pZero.checked) parts.push('"zero" 1');
     if (!pLiga.checked) parts.push('"calt" 0, "liga" 0, "dlig" 0');
     stage.style.fontFeatureSettings = featureString(parts);
+    // The row under the box is showing what the box's own switch does.
+    ligaRow.style.fontFeatureSettings =
+      pLiga.checked ? 'normal' : '"calt" 0, "liga" 0, "dlig" 0';
   }
   [pSs, pZero, pLiga].forEach(function (el) {
     el.addEventListener('change', dress);
