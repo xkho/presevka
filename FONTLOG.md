@@ -25,6 +25,25 @@ Exact notices and license terms are recorded in `OFL.txt` and
 
 ## ChangeLog
 
+### 29 October 2026 - Presevka 0.8.1 - Kwanho Lee (이관호)
+
+- Drew the Hangul a little smaller: the enlargement over Pretendard's own
+  drawing goes from 1.1297 to 1.11. 0.8.0 had taken as much of the proportional
+  fit as the heaviest weight could hold, which is a decision about the Hangul
+  on its own, and the Hangul is not read on its own. Code is mostly lowercase
+  Latin, and against lowercase the filled syllables read a size larger than the
+  letters beside them.
+- What the eye was reporting is how much of its own cell each script fills. A
+  mean syllable filled 85.8% of its 1000 units where `o` filled 76.4% of its
+  500, 9.4 points apart; 0.5.0 had the two level. They now stand 7.9 points
+  apart, at 84.3% against the same 76.4%.
+- The cost is spacing, which goes from 16.6% of the ink's width to 18.6%
+  against Pretendard's own 13.0%, and height, which comes to 1.199 of the cap
+  where Pretendard keeps 1.216 and Sarasa Gothic 1.219.
+- The Latin is untouched. The 792 cap, the 594 x-height and the side bearings
+  at 1.05 of Iosevka's default all hold, as do advance widths, coverage and
+  naming, so line and column counts hold.
+
 ### 27 October 2026 - Presevka 0.8.0 - Kwanho Lee (이관호)
 
 - Hangul is now scaled by the factor that maps Pretendard's own 864-unit
