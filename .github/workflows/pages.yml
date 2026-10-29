@@ -7,6 +7,13 @@ name: pages
 # controlled. Publishing a release refreshes the preview on its own.
 
 on:
+  # A release event runs on its tag, not on main, and the github-pages
+  # environment only accepts deployments from the refs listed in its branch
+  # policy. Without `v*` in that list the build succeeds and the deploy is
+  # rejected with "Tag vX.Y.Z is not allowed to deploy to github-pages", which
+  # is what happened to v0.8.1. The page itself is not versioned -- it always
+  # shows the latest release's fonts -- so what the tag contributes is only
+  # the timing.
   release:
     types: [published]
   push:
