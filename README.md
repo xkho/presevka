@@ -24,7 +24,8 @@
 
 ## 특징
 
-현대 한글 음절 11,172자 전체와 호환 자모 53자를 담았습니다. 힌팅이 적용되어 11–13px처럼 작은 크기에서 한글 가로획이 픽셀 그리드에 맞아 또렷하며, Pretendard 원본 한글 비율에서 글자폭을 조금 늘리고 좌우 여백을 확대해 만들었습니다. Pretendard의 강점인 가독성을 위해 한글 글리프는 Italic이 적용되지 않습니다.
+[Pretendard](https://github.com/orioncactus/pretendard)에서 제공하는 현대 한글 음절 11,172자 전체와 호환 자모 53자를 담았으며, 힌팅이 적용되어 11–13px처럼 작은 크기에서도 그 가독성을 유지합니다. 
+*(Pretendard의 강점인 가독성을 위해 한글 글리프는 Italic이 적용되지 않습니다.)*
 
 <p align="center">
   <picture>
@@ -36,10 +37,10 @@
 
 
 
-## Iosevka 사용자화
+## Iosevka Customization
 
-Presevka의 라틴 글자는 [Iosevka](https://github.com/be5invis/Iosevka)의 사용자화 로직을 그대로 사용합니다. 그래서 Iosevka의 stylistic set 19종과 character variant 99종이 폰트 안에 함께 들어 있고, 다시 받거나 빌드하지 않아도 에디터 설정만으로 켜집니다. 예를 들어 Visual Studio Code 에서는 아래와 같습니다. 
-자세한 Iosevka 사용자화 방법은 연결된 문서에서 확인해 보세요!
+Presevka의 라틴 글자는 [Iosevka](https://github.com/be5invis/Iosevka)의 변형으로, Iosevka의 커스터마이징 로직을 그대로 사용합니다. 그래서 Iosevka의 stylistic set 19종과 character variant 99종이 폰트 안에 함께 들어 있어 에디터 설정만으로 사용해볼 수 있습니다. 예를 들어 Visual Studio Code 에서는 아래와 같습니다. 
+자세한 Iosevka 사용자화 방법은 아래 연결된 문서에서 확인해 보세요!
 
 ```jsonc
 "editor.fontLigatures": "'ss14'" // Jetbrains Mono Style
@@ -48,9 +49,11 @@ Presevka의 라틴 글자는 [Iosevka](https://github.com/be5invis/Iosevka)의 �
 <table>
   <tr>
     <td>
-      <h2>
-        <a href="./docs/iosevka_features.md"> Iosevka 사용자화 방법 더 읽기 </a>
-      </h2>
+      <h4>
+        <a href="./docs/iosevka_features.md"> 
+        Read More about Iosevka Customization 
+        </a>
+      </h4>
     </td>
   </tr>
 </table>
